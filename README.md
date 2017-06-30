@@ -13,13 +13,29 @@ A library for using the Dandomain Pay API to make payments in the Dandomain webs
 
 Via Composer
 
-``` bash
+```bash
 $ composer require loevgaard/dandomain-pay-php-sdk
 ```
 
 ## Usage
 
-TODO
+```php
+<?php
+require_once 'vendor/autoload.php';
+
+$request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
+$handler = new \Loevgaard\Dandomain\Pay\Handler($request, '[insert shared key 1]', '[insert shared key 2]');
+$paymentRequest = $handler->getPaymentRequest();
+
+var_dump($paymentRequest);
+```
+
+Test if the checksum matches:
+
+```php
+<?php
+var_dump($handler->checksumMatches());
+```
 
 ## Change log
 
@@ -27,7 +43,7 @@ Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed re
 
 ## Testing
 
-``` bash
+```bash
 $ composer test
 ```
 
