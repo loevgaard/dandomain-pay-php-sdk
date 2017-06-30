@@ -284,18 +284,12 @@ class PaymentRequest
 
     public function populateFromRequest(Request $request)
     {
-        $numberFormatter = new \NumberFormatter('da_DK', \NumberFormatter::CURRENCY);
-        $currency = $request->request->get('APICurrencySymbol', '');
-        $totalAmount = $numberFormatter->parseCurrency($request->request->get('APITotalAmount', 0), $currency);
-        $shippingFee = $request->request->get('APIShippingFee', 0);
-        $paymentFee = $request->request->get('APIPayFee', 0);
-
         $this->setApiKey($request->request->get('APIkey', ''));
         $this->setMerchant($request->request->get('APIMerchant', ''));
         $this->setOrderId($request->request->get('APIOrderID', 0));
         $this->setSessionId($request->request->get('APISessionID', ''));
-        $this->setCurrencySymbol($currency);
-        $this->setTotalAmount($numberFormatter->parseCurrency($totalAmount, $currency));
+        $this->setCurrencySymbol($request->request->get('APICurrencySymbol', ''));
+        $this->setTotalAmount(static::currencyStringToFloat($request->request->get('APITotalAmount', '0.00')));
         $this->setCallBackUrl($request->request->get('APICallBackUrl', ''));
         $this->setFullCallBackOkUrl($request->request->get('APIFullCallBackOKUrl', ''));
         $this->setCallBackOkUrl($request->request->get('APICallBackOKUrl', ''));
@@ -338,9 +332,9 @@ class PaymentRequest
         $this->setDeliveryEmail($request->request->get('APIDEmail', ''));
         $this->setDeliveryEan($request->request->get('APIDean', ''));
         $this->setShippingMethod($request->request->get('APIShippingMethod', ''));
-        $this->setShippingFee($numberFormatter->parseCurrency($shippingFee, $currency));
+        $this->setShippingFee(static::currencyStringToFloat($request->request->get('APIShippingFee', '0.00')));
         $this->setPaymentMethod($request->request->get('APIPayMethod', ''));
-        $this->setPaymentFee($numberFormatter->parseCurrency($paymentFee, $currency));
+        $this->setPaymentFee(static::currencyStringToFloat($request->request->get('APIPayFee', '0.00')));
         $this->setCustomerIp($request->request->get('APICIP', ''));
         $this->setLoadBalancerRealIp($request->request->get('APILoadBalancerRealIP', ''));
 
@@ -352,15 +346,13 @@ class PaymentRequest
                 break;
             }
 
-            $price = $request->request->get('APIBasketProdPrice'.$i, 0);
-
             $orderLine = new OrderLine();
             $orderLine
                 ->setQuantity((int)$request->request->get('APIBasketProdAmount'.$i, 0))
                 ->setProductNumber($request->request->get('APIBasketProdNumber'.$i, ''))
                 ->setName($request->request->get('APIBasketProdName'.$i, ''))
-                ->setPrice($numberFormatter->parseCurrency($price, $currency))
-                ->setVat((float)$request->request->get('APIBasketProdVAT'.$i, 0))
+                ->setPrice(static::currencyStringToFloat($request->request->get('APIBasketProdPrice'.$i, '0.00')))
+                ->setVat((int)$request->request->get('APIBasketProdVAT'.$i, 0))
             ;
             $this->addOrderLine($orderLine);
 
@@ -369,11 +361,23 @@ class PaymentRequest
     }
 
     /**
+     * Takes strings like
+     * - 1.000,50
+     * - 1,000.50
+     * - 1000.50
+     * - 1000,50
+     *
+     * and returns 1000.50
+     *
      * @param string $str
      * @return float
      */
     public static function currencyStringToFloat(string $str) : float
     {
+        // verify format of string
+        if (!preg_match('/(\.|,)[0-9]{2}$/', $str)) {
+            throw new \InvalidArgumentException($str.' does not match the currency string format');
+        }
         $str = preg_replace('/[^0-9]+/', '', $str);
         return intval($str) / 100;
     }

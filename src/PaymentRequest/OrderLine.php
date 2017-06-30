@@ -20,12 +20,14 @@ class OrderLine
     protected $quantity;
 
     /**
+     * The price excl vat
+     *
      * @var float
      */
     protected $price;
 
     /**
-     * @var float
+     * @var int
      */
     protected $vat;
 
@@ -102,15 +104,15 @@ class OrderLine
     }
 
     /**
-     * @return float
+     * @return int
      */
-    public function getVat() : float
+    public function getVat() : int
     {
         return $this->vat;
     }
 
     /**
-     * @param float $vat
+     * @param int $vat
      * @return OrderLine
      */
     public function setVat($vat) : self

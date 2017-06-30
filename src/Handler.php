@@ -46,7 +46,7 @@ class Handler
             $this->paymentRequest->getOrderId(),
             $this->paymentRequest->getTotalAmount(),
             $this->sharedKey1,
-            $this->paymentRequest->getCurrencySymbol()
+            $this->paymentRequest->getPaymentGatewayCurrencyCode()
         );
     }
 
@@ -54,10 +54,10 @@ class Handler
      * @param int $orderId
      * @param float $amount
      * @param string $sharedKey
-     * @param string $currency
+     * @param int $currency
      * @return string
      */
-    public static function generateChecksum1(int $orderId, float $amount, string $sharedKey, string $currency) : string
+    public static function generateChecksum1(int $orderId, float $amount, string $sharedKey, int $currency) : string
     {
         // the amount needs to be formatted as a danish number, so we convert the float
         $amount = number_format($amount, 2, ',', '');
@@ -66,14 +66,15 @@ class Handler
 
     /**
      * Dandomain has a bug in their payment implementation where they don't
-     * include amount in checksum on their complete/success page
+     * include amount in checksum on their complete/success page.
+     * That is why we have a second method for computing that checksum
      *
      * @param int $orderId
      * @param string $sharedKey
-     * @param string $currency
+     * @param int $currency
      * @return string
      */
-    public static function generateChecksum2(int $orderId, string $sharedKey, string $currency) : string
+    public static function generateChecksum2(int $orderId, string $sharedKey, int $currency) : string
     {
         return strtolower(md5($orderId.'+'.$sharedKey.'+'.$currency));
     }
