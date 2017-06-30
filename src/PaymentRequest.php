@@ -148,7 +148,7 @@ class PaymentRequest
     protected $customerCvrnr;
 
     /**
-     * @var string
+     * @var int
      */
     protected $customerCustTypeId;
 
@@ -887,9 +887,9 @@ class PaymentRequest
     }
 
     /**
-     * @return string
+     * @return int
      */
-    public function getCustomerCustTypeId() : string
+    public function getCustomerCustTypeId() : int
     {
         return $this->customerCustTypeId;
     }
