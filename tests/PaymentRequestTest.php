@@ -167,8 +167,8 @@ final class PaymentRequestTest extends TestCase
         $this->assertInternalType('string', $paymentRequest->getCustomerCvrnr());
         $this->assertEquals($postRequest['APICcvrnr'], $paymentRequest->getCustomerCvrnr());
 
-        $this->assertInternalType('string', $paymentRequest->getCustomerCustTypeId());
-        $this->assertEquals($postRequest['APICCustTypeID'], $paymentRequest->getCustomerCustTypeId());
+        $this->assertInternalType('int', $paymentRequest->getCustomerCustTypeId());
+        $this->assertEquals((int)$postRequest['APICCustTypeID'], $paymentRequest->getCustomerCustTypeId());
 
         $this->assertInternalType('string', $paymentRequest->getCustomerEan());
         $this->assertEquals($postRequest['APICEAN'], $paymentRequest->getCustomerEan());
