@@ -42,10 +42,28 @@ class Handler
      */
     public function checksumMatches() : bool
     {
-        return $this->paymentRequest->getApiKey() === static::generateChecksum1(
+        return $this->paymentRequest->getApiKey() === $this->getChecksum1();
+    }
+
+    /**
+     * @return string
+     */
+    public function getChecksum1() {
+        return static::generateChecksum1(
             $this->paymentRequest->getOrderId(),
             $this->paymentRequest->getTotalAmount(),
             $this->sharedKey1,
+            $this->paymentRequest->getPaymentGatewayCurrencyCode()
+        );
+    }
+
+    /**
+     * @return string
+     */
+    public function getChecksum2() {
+        return static::generateChecksum2(
+            $this->paymentRequest->getOrderId(),
+            $this->sharedKey2,
             $this->paymentRequest->getPaymentGatewayCurrencyCode()
         );
     }
