@@ -4,7 +4,6 @@ namespace Loevgaard\Dandomain\Pay;
 
 use Loevgaard\Dandomain\Pay\PaymentRequest\OrderLine;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\HttpFoundation\Request;
 use Zend\Diactoros\ServerRequestFactory;
 
 final class PaymentRequestTest extends TestCase

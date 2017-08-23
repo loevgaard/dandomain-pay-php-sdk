@@ -4,7 +4,6 @@ namespace Loevgaard\Dandomain\Pay;
 
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
-use Symfony\Component\HttpFoundation\Request;
 
 final class HandlerTest extends TestCase
 {
