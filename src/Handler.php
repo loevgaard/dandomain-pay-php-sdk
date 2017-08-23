@@ -2,11 +2,13 @@
 
 namespace Loevgaard\Dandomain\Pay;
 
-use Symfony\Component\HttpFoundation\Request;
+use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * The Handler handles the request from Dandomain, typically a POST request with the order specific parameters
  * and turns that request into a PaymentRequest object
+ *
+ * Also it provides helper methods for checking checksums
  */
 class Handler
 {
@@ -25,7 +27,7 @@ class Handler
      */
     protected $paymentRequest;
 
-    public function __construct(Request $request, string $sharedKey1, string $sharedKey2)
+    public function __construct(ServerRequestInterface $request, string $sharedKey1, string $sharedKey2)
     {
         $paymentRequest = new PaymentRequest();
         $paymentRequest->populateFromRequest($request);
@@ -48,7 +50,8 @@ class Handler
     /**
      * @return string
      */
-    public function getChecksum1() {
+    public function getChecksum1()
+    {
         return static::generateChecksum1(
             $this->paymentRequest->getOrderId(),
             $this->paymentRequest->getTotalAmount(),
@@ -60,7 +63,8 @@ class Handler
     /**
      * @return string
      */
-    public function getChecksum2() {
+    public function getChecksum2()
+    {
         return static::generateChecksum2(
             $this->paymentRequest->getOrderId(),
             $this->sharedKey2,

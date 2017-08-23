@@ -3,7 +3,7 @@
 namespace Loevgaard\Dandomain\Pay;
 
 use Loevgaard\Dandomain\Pay\PaymentRequest\OrderLine;
-use Symfony\Component\HttpFoundation\Request;
+use Psr\Http\Message\ServerRequestInterface;
 
 class PaymentRequest
 {
@@ -282,77 +282,89 @@ class PaymentRequest
         $this->orderLines = [];
     }
 
-    public function populateFromRequest(Request $request)
+    public function populateFromRequest(ServerRequestInterface $request)
     {
-        $this->setApiKey($request->request->get('APIkey', ''));
-        $this->setMerchant($request->request->get('APIMerchant', ''));
-        $this->setOrderId($request->request->get('APIOrderID', 0));
-        $this->setSessionId($request->request->get('APISessionID', ''));
-        $this->setCurrencySymbol($request->request->get('APICurrencySymbol', ''));
-        $this->setTotalAmount(static::currencyStringToFloat($request->request->get('APITotalAmount', '0.00')));
-        $this->setCallBackUrl($request->request->get('APICallBackUrl', ''));
-        $this->setFullCallBackOkUrl($request->request->get('APIFullCallBackOKUrl', ''));
-        $this->setCallBackOkUrl($request->request->get('APICallBackOKUrl', ''));
-        $this->setCallBackServerUrl($request->request->get('APICallBackServerUrl', ''));
-        $this->setLanguageId((int)$request->request->get('APILanguageID', 0));
-        $this->setTestMode($request->request->get('APITestMode') === 'True');
-        $this->setPaymentGatewayCurrencyCode($request->request->get('APIPayGatewayCurrCode', 0));
-        $this->setCardTypeId((int)$request->request->get('APICardTypeID', 0));
-        $this->setCustomerRekvNr($request->request->get('APICRekvNr', ''));
-        $this->setCustomerName($request->request->get('APICName', ''));
-        $this->setCustomerCompany($request->request->get('APICCompany', ''));
-        $this->setCustomerAddress($request->request->get('APICAddress', ''));
-        $this->setCustomerAddress2($request->request->get('APICAddress2', ''));
-        $this->setCustomerZipCode($request->request->get('APICZipCode', ''));
-        $this->setCustomerCity($request->request->get('APICCity', ''));
-        $this->setCustomerCountryId((int)$request->request->get('APICCountryID', 0));
-        $this->setCustomerCountry($request->request->get('APICCountry', ''));
-        $this->setCustomerPhone($request->request->get('APICPhone', ''));
-        $this->setCustomerFax($request->request->get('APICFax', ''));
-        $this->setCustomerEmail($request->request->get('APICEmail', ''));
-        $this->setCustomerNote($request->request->get('APICNote', ''));
-        $this->setCustomerCvrnr($request->request->get('APICcvrnr', ''));
-        $this->setCustomerCustTypeId((int)$request->request->get('APICCustTypeID', 0));
-        $this->setCustomerEan($request->request->get('APICEAN', ''));
-        $this->setCustomerRes1($request->request->get('APICres1', ''));
-        $this->setCustomerRes2($request->request->get('APICres2', ''));
-        $this->setCustomerRes3($request->request->get('APICres3', ''));
-        $this->setCustomerRes4($request->request->get('APICres4', ''));
-        $this->setCustomerRes5($request->request->get('APICres5', ''));
-        $this->setDeliveryName($request->request->get('APIDName', ''));
-        $this->setDeliveryCompany($request->request->get('APIDCompany', ''));
-        $this->setDeliveryAddress($request->request->get('APIDAddress', ''));
-        $this->setDeliveryAddress2($request->request->get('APIDAddress2', ''));
-        $this->setDeliveryZipCode($request->request->get('APIDZipCode', ''));
-        $this->setDeliveryCity($request->request->get('APIDCity', ''));
-        $this->setDeliveryCountryID((int)$request->request->get('APIDCountryID', 0));
-        $this->setDeliveryCountry($request->request->get('APIDCountry', ''));
-        $this->setDeliveryPhone($request->request->get('APIDPhone', ''));
-        $this->setDeliveryFax($request->request->get('APIDFax', ''));
-        $this->setDeliveryEmail($request->request->get('APIDEmail', ''));
-        $this->setDeliveryEan($request->request->get('APIDean', ''));
-        $this->setShippingMethod($request->request->get('APIShippingMethod', ''));
-        $this->setShippingFee(static::currencyStringToFloat($request->request->get('APIShippingFee', '0.00')));
-        $this->setPaymentMethod($request->request->get('APIPayMethod', ''));
-        $this->setPaymentFee(static::currencyStringToFloat($request->request->get('APIPayFee', '0.00')));
-        $this->setCustomerIp($request->request->get('APICIP', ''));
-        $this->setLoadBalancerRealIp($request->request->get('APILoadBalancerRealIP', ''));
+        $body = $request->getParsedBody();
+        $body = is_array($body) ? $body : [];
+
+        $this->setApiKey($body['APIkey'] ?? '');
+        $this->setMerchant($body['APIMerchant'] ?? '');
+        $this->setOrderId($body['APIOrderID'] ?? 0);
+        $this->setSessionId($body['APISessionID'] ?? '');
+        $this->setCurrencySymbol($body['APICurrencySymbol'] ?? '');
+        $this->setTotalAmount(static::currencyStringToFloat($body['APITotalAmount'] ?? '0.00'));
+        $this->setCallBackUrl($body['APICallBackUrl'] ?? '');
+        $this->setFullCallBackOkUrl($body['APIFullCallBackOKUrl'] ?? '');
+        $this->setCallBackOkUrl($body['APICallBackOKUrl'] ?? '');
+        $this->setCallBackServerUrl($body['APICallBackServerUrl'] ?? '');
+        $this->setLanguageId(isset($body['APILanguageID']) ? (int)$body['APILanguageID'] :  0);
+        $this->setTestMode(isset($body['APITestMode']) && $body['APITestMode'] === 'True');
+        $this->setPaymentGatewayCurrencyCode(
+            isset($body['APIPayGatewayCurrCode']) ? (int)$body['APIPayGatewayCurrCode'] : 0
+        );
+        $this->setCardTypeId(isset($body['APICardTypeID']) ? (int)$body['APICardTypeID'] : 0);
+        $this->setCustomerRekvNr($body['APICRekvNr'] ?? '');
+        $this->setCustomerName($body['APICName'] ?? '');
+        $this->setCustomerCompany($body['APICCompany'] ?? '');
+        $this->setCustomerAddress($body['APICAddress'] ?? '');
+        $this->setCustomerAddress2($body['APICAddress2'] ?? '');
+        $this->setCustomerZipCode($body['APICZipCode'] ?? '');
+        $this->setCustomerCity($body['APICCity'] ?? '');
+        $this->setCustomerCountryId(isset($body['APICCountryID']) ? (int)$body['APICCountryID'] : 0);
+        $this->setCustomerCountry($body['APICCountry'] ?? '');
+        $this->setCustomerPhone($body['APICPhone'] ?? '');
+        $this->setCustomerFax($body['APICFax'] ?? '');
+        $this->setCustomerEmail($body['APICEmail'] ?? '');
+        $this->setCustomerNote($body['APICNote'] ?? '');
+        $this->setCustomerCvrnr($body['APICcvrnr'] ?? '');
+        $this->setCustomerCustTypeId(isset($body['APICCustTypeID']) ? (int)$body['APICCustTypeID'] : 0);
+        $this->setCustomerEan($body['APICEAN'] ?? '');
+        $this->setCustomerRes1($body['APICres1'] ?? '');
+        $this->setCustomerRes2($body['APICres2'] ?? '');
+        $this->setCustomerRes3($body['APICres3'] ?? '');
+        $this->setCustomerRes4($body['APICres4'] ?? '');
+        $this->setCustomerRes5($body['APICres5'] ?? '');
+        $this->setDeliveryName($body['APIDName'] ?? '');
+        $this->setDeliveryCompany($body['APIDCompany'] ?? '');
+        $this->setDeliveryAddress($body['APIDAddress'] ?? '');
+        $this->setDeliveryAddress2($body['APIDAddress2'] ?? '');
+        $this->setDeliveryZipCode($body['APIDZipCode'] ?? '');
+        $this->setDeliveryCity($body['APIDCity'] ?? '');
+        $this->setDeliveryCountryID(isset($body['APIDCountryID']) ? (int)$body['APIDCountryID'] : 0);
+        $this->setDeliveryCountry($body['APIDCountry'] ?? '');
+        $this->setDeliveryPhone($body['APIDPhone'] ?? '');
+        $this->setDeliveryFax($body['APIDFax'] ?? '');
+        $this->setDeliveryEmail($body['APIDEmail'] ?? '');
+        $this->setDeliveryEan($body['APIDean'] ?? '');
+        $this->setShippingMethod($body['APIShippingMethod'] ?? '');
+        $this->setShippingFee(static::currencyStringToFloat($body['APIShippingFee'] ?? '0.00'));
+        $this->setPaymentMethod($body['APIPayMethod'] ?? '');
+        $this->setPaymentFee(static::currencyStringToFloat($body['APIPayFee'] ?? '0.00'));
+        $this->setCustomerIp($body['APICIP'] ?? '');
+        $this->setLoadBalancerRealIp($body['APILoadBalancerRealIP'] ?? '');
 
         // populate order lines
         $i = 1;
         while (true) {
-            $exists = $request->request->get('APIBasketProdAmount'.$i, false);
+            $exists = isset($body['APIBasketProdAmount'.$i]);
             if ($exists === false) {
                 break;
             }
 
+            $qty = isset($body['APIBasketProdAmount'.$i]) ? (int)$body['APIBasketProdAmount'.$i] : 0;
+            $productNumber = isset($body['APIBasketProdNumber'.$i]) ? $body['APIBasketProdNumber'.$i] : '';
+            $name = isset($body['APIBasketProdName'.$i]) ? $body['APIBasketProdName'.$i] : '';
+            $price = isset($body['APIBasketProdPrice'.$i]) ?
+                static::currencyStringToFloat($body['APIBasketProdPrice'.$i]) : 0.00;
+            $vat = isset($body['APIBasketProdVAT'.$i]) ? (int)$body['APIBasketProdVAT'.$i] : 0;
+
             $orderLine = new OrderLine();
             $orderLine
-                ->setQuantity((int)$request->request->get('APIBasketProdAmount'.$i, 0))
-                ->setProductNumber($request->request->get('APIBasketProdNumber'.$i, ''))
-                ->setName($request->request->get('APIBasketProdName'.$i, ''))
-                ->setPrice(static::currencyStringToFloat($request->request->get('APIBasketProdPrice'.$i, '0.00')))
-                ->setVat((int)$request->request->get('APIBasketProdVAT'.$i, 0))
+                ->setQuantity($qty)
+                ->setProductNumber($productNumber)
+                ->setName($name)
+                ->setPrice($price)
+                ->setVat($vat)
             ;
             $this->addOrderLine($orderLine);
 

@@ -23,7 +23,12 @@ $ composer require loevgaard/dandomain-pay-php-sdk
 <?php
 require_once 'vendor/autoload.php';
 
-$request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
+/**
+* The $request need to implement the PSR7 ServerRequestInterface
+ * 
+ * @var \Psr\Http\Message\ServerRequestInterface $request
+ */
+$request = '';
 $handler = new \Loevgaard\Dandomain\Pay\Handler($request, '[insert shared key 1]', '[insert shared key 2]');
 $paymentRequest = $handler->getPaymentRequest();
 

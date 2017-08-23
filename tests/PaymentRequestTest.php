@@ -5,6 +5,7 @@ namespace Loevgaard\Dandomain\Pay;
 use Loevgaard\Dandomain\Pay\PaymentRequest\OrderLine;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
+use Zend\Diactoros\ServerRequestFactory;
 
 final class PaymentRequestTest extends TestCase
 {
@@ -75,7 +76,7 @@ final class PaymentRequestTest extends TestCase
             'APIBasketProdPrice2' => '119,80',
             'APIBasketProdVAT2' => '25'
         ];
-        $request = new Request([], $postRequest);
+        $request = ServerRequestFactory::fromGlobals(null, null, $postRequest);
 
         $handler = new Handler($request, 'key1', 'key2');
 

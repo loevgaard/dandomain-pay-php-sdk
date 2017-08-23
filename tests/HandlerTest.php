@@ -3,13 +3,15 @@
 namespace Loevgaard\Dandomain\Pay;
 
 use PHPUnit\Framework\TestCase;
+use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 final class HandlerTest extends TestCase
 {
     public function testChecksumMatches()
     {
-        $handler = new Handler(new Request(), 'key1', 'key2');
+        $serverRequest = $this->createMock(ServerRequestInterface::class);
+        $handler = new Handler($serverRequest, 'key1', 'key2');
         $paymentRequest = new PaymentRequest();
         $paymentRequest
             ->setApiKey('c30c731cc1e22e9d0f7ce4fa9768a4df')
@@ -49,7 +51,8 @@ final class HandlerTest extends TestCase
 
     public function testGetSetPaymentRequest()
     {
-        $handler = new Handler(new Request(), 'key1', 'key2');
+        $serverRequest = $this->createMock(ServerRequestInterface::class);
+        $handler = new Handler($serverRequest, 'key1', 'key2');
         $paymentRequest = new PaymentRequest();
         $paymentRequest->setApiKey('c30c731cc1e22e9d0f7ce4fa9768a4df');
         $handler->setPaymentRequest($paymentRequest);
