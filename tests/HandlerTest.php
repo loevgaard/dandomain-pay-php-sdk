@@ -46,6 +46,16 @@ final class HandlerTest extends TestCase
         $expected = '256c77ebbe2664f7ef7e683c3c152033';
 
         $this->assertEquals($expected, $result);
+
+        $serverRequest = $this->createMock(ServerRequestInterface::class);
+        $handler = new Handler($serverRequest, 'key', 'key');
+        $paymentRequest = new PaymentRequest();
+        $paymentRequest
+            ->setOrderId(100)
+            ->setPaymentGatewayCurrencyCode(208)
+        ;
+        $handler->setPaymentRequest($paymentRequest);
+        $this->assertEquals($expected, $handler->getChecksum2());
     }
 
     public function testGetSetPaymentRequest()

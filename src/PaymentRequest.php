@@ -1,8 +1,7 @@
 <?php
-
 namespace Loevgaard\Dandomain\Pay;
 
-use Loevgaard\Dandomain\Pay\PaymentRequest\OrderLine;
+use Loevgaard\Dandomain\Pay\PaymentRequest\PaymentLine;
 use Psr\Http\Message\ServerRequestInterface;
 
 class PaymentRequest
@@ -273,13 +272,13 @@ class PaymentRequest
     protected $loadBalancerRealIp;
 
     /**
-     * @var OrderLine[]
+     * @var PaymentLine[]
      */
-    protected $orderLines;
+    protected $paymentLines;
 
     public function __construct()
     {
-        $this->orderLines = [];
+        $this->paymentLines = [];
     }
 
     public function populateFromRequest(ServerRequestInterface $request)
@@ -358,7 +357,7 @@ class PaymentRequest
                 static::currencyStringToFloat($body['APIBasketProdPrice'.$i]) : 0.00;
             $vat = isset($body['APIBasketProdVAT'.$i]) ? (int)$body['APIBasketProdVAT'.$i] : 0;
 
-            $orderLine = new OrderLine();
+            $orderLine = new PaymentLine();
             $orderLine
                 ->setQuantity($qty)
                 ->setProductNumber($productNumber)
@@ -1349,30 +1348,30 @@ class PaymentRequest
     }
 
     /**
-     * @return OrderLine[]
+     * @return PaymentLine[]|iterable
      */
-    public function getOrderLines() : array
+    public function getPaymentLines() : iterable
     {
-        return $this->orderLines;
+        return $this->paymentLines;
     }
 
     /**
-     * @param OrderLine[] $orderLines
+     * @param PaymentLine[]|iterable $paymentLines
      * @return PaymentRequest
      */
-    public function setOrderLines(array $orderLines) : self
+    public function setPaymentLines(iterable $paymentLines) : self
     {
-        $this->orderLines = $orderLines;
+        $this->paymentLines = $paymentLines;
         return $this;
     }
 
     /**
-     * @param OrderLine $orderLine
+     * @param PaymentLine $orderLine
      * @return PaymentRequest
      */
-    public function addOrderLine(OrderLine $orderLine) : self
+    public function addOrderLine(PaymentLine $orderLine) : self
     {
-        $this->orderLines[] = $orderLine;
+        $this->paymentLines[] = $orderLine;
         return $this;
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Loevgaard\Dandomain\Pay\PaymentRequest;
 
-class OrderLine
+class PaymentLine
 {
     /**
      * @var string
@@ -41,7 +41,7 @@ class OrderLine
 
     /**
      * @param string $productNumber
-     * @return OrderLine
+     * @return PaymentLine
      */
     public function setProductNumber(string $productNumber) : self
     {
@@ -59,7 +59,7 @@ class OrderLine
 
     /**
      * @param string $name
-     * @return OrderLine
+     * @return PaymentLine
      */
     public function setName($name) : self
     {
@@ -77,7 +77,7 @@ class OrderLine
 
     /**
      * @param int $quantity
-     * @return OrderLine
+     * @return PaymentLine
      */
     public function setQuantity($quantity) : self
     {
@@ -95,7 +95,7 @@ class OrderLine
 
     /**
      * @param float $price
-     * @return OrderLine
+     * @return PaymentLine
      */
     public function setPrice($price) : self
     {
@@ -113,7 +113,7 @@ class OrderLine
 
     /**
      * @param int $vat
-     * @return OrderLine
+     * @return PaymentLine
      */
     public function setVat($vat) : self
     {

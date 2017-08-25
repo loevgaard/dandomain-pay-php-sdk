@@ -23,6 +23,16 @@ class Handler
     protected $sharedKey2;
 
     /**
+     * @var string
+     */
+    protected $checksum1;
+
+    /**
+     * @var string
+     */
+    protected $checksum2;
+
+    /**
      * @var PaymentRequest
      */
     protected $paymentRequest;
@@ -52,12 +62,16 @@ class Handler
      */
     public function getChecksum1()
     {
-        return static::generateChecksum1(
-            $this->paymentRequest->getOrderId(),
-            $this->paymentRequest->getTotalAmount(),
-            $this->sharedKey1,
-            $this->paymentRequest->getPaymentGatewayCurrencyCode()
-        );
+        if (!$this->checksum1) {
+            $this->checksum1 = static::generateChecksum1(
+                $this->paymentRequest->getOrderId(),
+                $this->paymentRequest->getTotalAmount(),
+                $this->sharedKey1,
+                $this->paymentRequest->getPaymentGatewayCurrencyCode()
+            );
+        }
+
+        return $this->checksum1;
     }
 
     /**
@@ -65,11 +79,15 @@ class Handler
      */
     public function getChecksum2()
     {
-        return static::generateChecksum2(
-            $this->paymentRequest->getOrderId(),
-            $this->sharedKey2,
-            $this->paymentRequest->getPaymentGatewayCurrencyCode()
-        );
+        if (!$this->checksum2) {
+            $this->checksum2 = static::generateChecksum2(
+                $this->paymentRequest->getOrderId(),
+                $this->sharedKey2,
+                $this->paymentRequest->getPaymentGatewayCurrencyCode()
+            );
+        }
+
+        return $this->checksum2;
     }
 
     /**

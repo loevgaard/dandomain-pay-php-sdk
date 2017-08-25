@@ -2,7 +2,7 @@
 
 namespace Loevgaard\Dandomain\Pay;
 
-use Loevgaard\Dandomain\Pay\PaymentRequest\OrderLine;
+use Loevgaard\Dandomain\Pay\PaymentRequest\PaymentLine;
 use PHPUnit\Framework\TestCase;
 use Zend\Diactoros\ServerRequestFactory;
 
@@ -243,7 +243,7 @@ final class PaymentRequestTest extends TestCase
         $this->assertEquals($postRequest['APILoadBalancerRealIP'], $paymentRequest->getLoadBalancerRealIp());
 
         $i = 1;
-        foreach ($paymentRequest->getOrderLines() as $orderLine) {
+        foreach ($paymentRequest->getPaymentLines() as $orderLine) {
             $this->assertInternalType('int', $orderLine->getQuantity());
             $this->assertInternalType('string', $orderLine->getProductNumber());
             $this->assertInternalType('string', $orderLine->getName());
@@ -268,7 +268,7 @@ final class PaymentRequestTest extends TestCase
 
     public function testSetOrderLines()
     {
-        $orderLine = new OrderLine();
+        $orderLine = new PaymentLine();
         $orderLine
             ->setVat(25)
             ->setPrice(100.50)
@@ -280,9 +280,9 @@ final class PaymentRequestTest extends TestCase
         $orderLines = [$orderLine];
 
         $paymentRequest = new PaymentRequest();
-        $paymentRequest->setOrderLines($orderLines);
+        $paymentRequest->setPaymentLines($orderLines);
 
-        $this->assertEquals($orderLines, $paymentRequest->getOrderLines());
+        $this->assertEquals($orderLines, $paymentRequest->getPaymentLines());
     }
 
     public function testCurrencyStringToFloat()
