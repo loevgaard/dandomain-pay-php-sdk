@@ -272,6 +272,11 @@ class PaymentRequest
     protected $loadBalancerRealIp;
 
     /**
+     * @var string
+     */
+    protected $referrer;
+
+    /**
      * @var PaymentLine[]
      */
     protected $paymentLines;
@@ -341,6 +346,7 @@ class PaymentRequest
         $this->setPaymentFee(static::currencyStringToFloat($body['APIPayFee'] ?? '0.00'));
         $this->setCustomerIp($body['APICIP'] ?? '');
         $this->setLoadBalancerRealIp($body['APILoadBalancerRealIP'] ?? '');
+        $this->setReferrer($request->hasHeader('referer') ? $request->getHeaderLine('referer') : '');
 
         // populate order lines
         $i = 1;
@@ -1344,6 +1350,24 @@ class PaymentRequest
     public function setLoadBalancerRealIp(string $loadBalancerRealIp) : self
     {
         $this->loadBalancerRealIp = $loadBalancerRealIp;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getReferrer(): string
+    {
+        return $this->referrer;
+    }
+
+    /**
+     * @param string $referrer
+     * @return PaymentRequest
+     */
+    public function setReferrer(string $referrer) : self
+    {
+        $this->referrer = $referrer;
         return $this;
     }
 

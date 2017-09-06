@@ -10,6 +10,10 @@ final class PaymentRequestTest extends TestCase
 {
     public function testPopulateFromRequest()
     {
+        $serverRequest = [
+            'HTTP_REFERER' => 'referrer',
+        ];
+
         $postRequest = [
             'APIkey' => 'a2957ab9ac712b73f75264dbb8858fd2',
             'APIMerchant' => '123456',
@@ -75,7 +79,7 @@ final class PaymentRequestTest extends TestCase
             'APIBasketProdPrice2' => '119,80',
             'APIBasketProdVAT2' => '25'
         ];
-        $request = ServerRequestFactory::fromGlobals(null, null, $postRequest);
+        $request = ServerRequestFactory::fromGlobals($serverRequest, null, $postRequest);
 
         $handler = new Handler($request, 'key1', 'key2');
 
@@ -241,6 +245,9 @@ final class PaymentRequestTest extends TestCase
 
         $this->assertInternalType('string', $paymentRequest->getLoadBalancerRealIp());
         $this->assertEquals($postRequest['APILoadBalancerRealIP'], $paymentRequest->getLoadBalancerRealIp());
+
+        $this->assertInternalType('string', $paymentRequest->getReferrer());
+        $this->assertEquals($serverRequest['HTTP_REFERER'], $paymentRequest->getReferrer());
 
         $i = 1;
         foreach ($paymentRequest->getPaymentLines() as $orderLine) {
