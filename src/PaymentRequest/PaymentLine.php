@@ -27,6 +27,8 @@ class PaymentLine
     protected $price;
 
     /**
+     * This is the VAT percentage, i.e. 25 for Denmark
+     *
      * @var int
      */
     protected $vat;
@@ -104,6 +106,8 @@ class PaymentLine
     }
 
     /**
+     * Returns the VAT percentage
+     *
      * @return int
      */
     public function getVat() : int
