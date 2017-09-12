@@ -296,7 +296,7 @@ class PaymentRequest
         $this->setOrderId($body['APIOrderID'] ?? 0);
         $this->setSessionId($body['APISessionID'] ?? '');
         $this->setCurrencySymbol($body['APICurrencySymbol'] ?? '');
-        $this->setTotalAmount(static::currencyStringToFloat($body['APITotalAmount'] ?? '0.00'));
+        $this->setTotalAmount(static::currencyStringToFloat($body['APITotalAmount'] ?? '0.00', 'APITotalAmount'));
         $this->setCallBackUrl($body['APICallBackUrl'] ?? '');
         $this->setFullCallBackOkUrl($body['APIFullCallBackOKUrl'] ?? '');
         $this->setCallBackOkUrl($body['APICallBackOKUrl'] ?? '');
@@ -341,9 +341,9 @@ class PaymentRequest
         $this->setDeliveryEmail($body['APIDEmail'] ?? '');
         $this->setDeliveryEan($body['APIDean'] ?? '');
         $this->setShippingMethod($body['APIShippingMethod'] ?? '');
-        $this->setShippingFee(static::currencyStringToFloat($body['APIShippingFee'] ?? '0.00'));
+        $this->setShippingFee(static::currencyStringToFloat($body['APIShippingFee'] ?? '0.00', 'APIShippingFee'));
         $this->setPaymentMethod($body['APIPayMethod'] ?? '');
-        $this->setPaymentFee(static::currencyStringToFloat($body['APIPayFee'] ?? '0.00'));
+        $this->setPaymentFee(static::currencyStringToFloat($body['APIPayFee'] ?? '0.00', 'APIPayFee'));
         $this->setCustomerIp($body['APICIP'] ?? '');
         $this->setLoadBalancerRealIp($body['APILoadBalancerRealIP'] ?? '');
         $this->setReferrer($request->hasHeader('referer') ? $request->getHeaderLine('referer') : '');
@@ -360,7 +360,7 @@ class PaymentRequest
             $productNumber = isset($body['APIBasketProdNumber'.$i]) ? $body['APIBasketProdNumber'.$i] : '';
             $name = isset($body['APIBasketProdName'.$i]) ? $body['APIBasketProdName'.$i] : '';
             $price = isset($body['APIBasketProdPrice'.$i]) ?
-                static::currencyStringToFloat($body['APIBasketProdPrice'.$i]) : 0.00;
+                static::currencyStringToFloat($body['APIBasketProdPrice'.$i], 'APIBasketProdPrice'.$i) : 0.00;
             $vat = isset($body['APIBasketProdVAT'.$i]) ? (int)$body['APIBasketProdVAT'.$i] : 0;
 
             $orderLine = new PaymentLine();
@@ -387,13 +387,14 @@ class PaymentRequest
      * and returns 1000.50
      *
      * @param string $str
+     * @param string $propertyPath
      * @return float
      */
-    public static function currencyStringToFloat(string $str) : float
+    public static function currencyStringToFloat(string $str, string $propertyPath = '') : float
     {
         // verify format of string
         if (!preg_match('/(\.|,)[0-9]{2}$/', $str)) {
-            throw new \InvalidArgumentException($str.' does not match the currency string format');
+            throw new \InvalidArgumentException(($propertyPath ? $propertyPath.' (value: "'.$str.'")' : $str).' does not match the currency string format');
         }
         $str = preg_replace('/[^0-9]+/', '', $str);
         return intval($str) / 100;
