@@ -392,6 +392,8 @@ class PaymentRequest
      */
     public static function currencyStringToFloat(string $str, string $propertyPath = '') : float
     {
+        $str = trim($str);
+
         // verify format of string
         if (!preg_match('/(\.|,)[0-9]{2}$/', $str)) {
             throw new \InvalidArgumentException(($propertyPath ? $propertyPath.' (value: "'.$str.'")' : $str).' does not match the currency string format');
