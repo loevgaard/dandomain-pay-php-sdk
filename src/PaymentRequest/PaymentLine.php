@@ -2,6 +2,8 @@
 
 namespace Loevgaard\Dandomain\Pay\PaymentRequest;
 
+use Loevgaard\Dandomain\Pay\PaymentRequest;
+
 class PaymentLine
 {
     /**
@@ -32,6 +34,11 @@ class PaymentLine
      * @var int
      */
     protected $vat;
+
+    /**
+     * @var PaymentRequest
+     */
+    protected $payment;
 
     /**
      * @return string
@@ -122,6 +129,24 @@ class PaymentLine
     public function setVat($vat) : self
     {
         $this->vat = $vat;
+        return $this;
+    }
+
+    /**
+     * @return PaymentRequest
+     */
+    public function getPayment() : PaymentRequest
+    {
+        return $this->payment;
+    }
+
+    /**
+     * @param PaymentRequest $payment
+     * @return PaymentLine
+     */
+    public function setPayment(PaymentRequest $payment) : self
+    {
+        $this->payment = $payment;
         return $this;
     }
 }
