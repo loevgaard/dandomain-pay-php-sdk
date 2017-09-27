@@ -1399,6 +1399,7 @@ class PaymentRequest
      */
     public function addPaymentLine(PaymentLine $paymentLine) : self
     {
+        $paymentLine->setPayment($this);
         $this->paymentLines[] = $paymentLine;
         return $this;
     }
