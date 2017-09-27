@@ -363,15 +363,15 @@ class PaymentRequest
                 static::currencyStringToFloat($body['APIBasketProdPrice'.$i], 'APIBasketProdPrice'.$i) : 0.00;
             $vat = isset($body['APIBasketProdVAT'.$i]) ? (int)$body['APIBasketProdVAT'.$i] : 0;
 
-            $orderLine = new PaymentLine();
-            $orderLine
+            $paymentLine = new PaymentLine();
+            $paymentLine
                 ->setQuantity($qty)
                 ->setProductNumber($productNumber)
                 ->setName($name)
                 ->setPrice($price)
                 ->setVat($vat)
             ;
-            $this->addOrderLine($orderLine);
+            $this->addPaymentLine($paymentLine);
 
             $i++;
         }
@@ -396,7 +396,8 @@ class PaymentRequest
 
         // verify format of string
         if (!preg_match('/(\.|,)[0-9]{2}$/', $str)) {
-            throw new \InvalidArgumentException(($propertyPath ? $propertyPath.' (value: "'.$str.'")' : $str).' does not match the currency string format');
+            throw new \InvalidArgumentException(($propertyPath ? $propertyPath.' (value: "'.$str.'")' : $str).
+                ' does not match the currency string format');
         }
         $str = preg_replace('/[^0-9]+/', '', $str);
         return intval($str) / 100;
@@ -1393,12 +1394,12 @@ class PaymentRequest
     }
 
     /**
-     * @param PaymentLine $orderLine
+     * @param PaymentLine $paymentLine
      * @return PaymentRequest
      */
-    public function addOrderLine(PaymentLine $orderLine) : self
+    public function addPaymentLine(PaymentLine $paymentLine) : self
     {
-        $this->paymentLines[] = $orderLine;
+        $this->paymentLines[] = $paymentLine;
         return $this;
     }
 }

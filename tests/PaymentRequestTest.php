@@ -250,12 +250,12 @@ final class PaymentRequestTest extends TestCase
         $this->assertEquals($serverRequest['HTTP_REFERER'], $paymentRequest->getReferrer());
 
         $i = 1;
-        foreach ($paymentRequest->getPaymentLines() as $orderLine) {
-            $this->assertInternalType('int', $orderLine->getQuantity());
-            $this->assertInternalType('string', $orderLine->getProductNumber());
-            $this->assertInternalType('string', $orderLine->getName());
-            $this->assertInternalType('float', $orderLine->getPrice());
-            $this->assertInternalType('int', $orderLine->getVat());
+        foreach ($paymentRequest->getPaymentLines() as $paymentLine) {
+            $this->assertInternalType('int', $paymentLine->getQuantity());
+            $this->assertInternalType('string', $paymentLine->getProductNumber());
+            $this->assertInternalType('string', $paymentLine->getName());
+            $this->assertInternalType('float', $paymentLine->getPrice());
+            $this->assertInternalType('int', $paymentLine->getVat());
 
             $qty = $postRequest['APIBasketProdAmount'.$i];
             $productNumber = $postRequest['APIBasketProdNumber'.$i];
@@ -263,20 +263,20 @@ final class PaymentRequestTest extends TestCase
             $price = PaymentRequest::currencyStringToFloat($postRequest['APIBasketProdPrice'.$i]);
             $vat = (int)$postRequest['APIBasketProdVAT'.$i];
 
-            $this->assertEquals($qty, $orderLine->getQuantity());
-            $this->assertEquals($productNumber, $orderLine->getProductNumber());
-            $this->assertEquals($name, $orderLine->getName());
-            $this->assertEquals($price, $orderLine->getPrice());
-            $this->assertEquals($vat, $orderLine->getVat());
+            $this->assertEquals($qty, $paymentLine->getQuantity());
+            $this->assertEquals($productNumber, $paymentLine->getProductNumber());
+            $this->assertEquals($name, $paymentLine->getName());
+            $this->assertEquals($price, $paymentLine->getPrice());
+            $this->assertEquals($vat, $paymentLine->getVat());
 
             $i++;
         }
     }
 
-    public function testSetOrderLines()
+    public function testSetPaymentLines()
     {
-        $orderLine = new PaymentLine();
-        $orderLine
+        $paymentLine = new PaymentLine();
+        $paymentLine
             ->setVat(25)
             ->setPrice(100.50)
             ->setName('name')
@@ -284,12 +284,12 @@ final class PaymentRequestTest extends TestCase
             ->setQuantity(1)
         ;
 
-        $orderLines = [$orderLine];
+        $paymentLines = [$paymentLine];
 
         $paymentRequest = new PaymentRequest();
-        $paymentRequest->setPaymentLines($orderLines);
+        $paymentRequest->setPaymentLines($paymentLines);
 
-        $this->assertEquals($orderLines, $paymentRequest->getPaymentLines());
+        $this->assertEquals($paymentLines, $paymentRequest->getPaymentLines());
     }
 
     public function testCurrencyStringToFloat()
