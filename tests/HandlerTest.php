@@ -23,6 +23,7 @@ final class HandlerTest extends TestCase
 
         $this->assertTrue($handler->checksumMatches());
     }
+
     public function testGenerateChecksum1()
     {
         $orderId = 100;

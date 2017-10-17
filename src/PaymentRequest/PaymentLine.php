@@ -2,6 +2,7 @@
 
 namespace Loevgaard\Dandomain\Pay\PaymentRequest;
 
+use Brick\Math\BigDecimal;
 use Loevgaard\Dandomain\Pay\PaymentRequest;
 
 class PaymentLine
@@ -22,14 +23,14 @@ class PaymentLine
     protected $quantity;
 
     /**
-     * The price excl vat
+     * The price excl vat.
      *
      * @var float
      */
     protected $price;
 
     /**
-     * This is the VAT percentage, i.e. 25 for Denmark
+     * This is the VAT percentage, i.e. 25 for Denmark.
      *
      * @var int
      */
@@ -40,113 +41,157 @@ class PaymentLine
      */
     protected $payment;
 
+    /******************
+     * Helper methods *
+     *****************/
+
+    /**
+     * @return float
+     */
+    public function getPriceExclVat(): float
+    {
+        return $this->getPrice();
+    }
+
+    /**
+     * @return float
+     */
+    public function getPriceInclVat(): float
+    {
+        $price = BigDecimal::of($this->getPrice());
+
+        return $price
+            ->multipliedBy(100 + $this->getVat())
+            ->dividedBy(100, 2)
+            ->toFloat()
+        ;
+    }
+
+    /*********************
+     * Getters / Setters *
+     ********************/
+
     /**
      * @return string
      */
-    public function getProductNumber() : string
+    public function getProductNumber(): string
     {
         return $this->productNumber;
     }
 
     /**
      * @param string $productNumber
+     *
      * @return PaymentLine
      */
-    public function setProductNumber(string $productNumber) : self
+    public function setProductNumber(string $productNumber): self
     {
         $this->productNumber = $productNumber;
+
         return $this;
     }
 
     /**
      * @return string
      */
-    public function getName() : string
+    public function getName(): string
     {
         return $this->name;
     }
 
     /**
      * @param string $name
+     *
      * @return PaymentLine
      */
-    public function setName($name) : self
+    public function setName($name): self
     {
         $this->name = $name;
+
         return $this;
     }
 
     /**
      * @return int
      */
-    public function getQuantity() : int
+    public function getQuantity(): int
     {
         return $this->quantity;
     }
 
     /**
      * @param int $quantity
+     *
      * @return PaymentLine
      */
-    public function setQuantity($quantity) : self
+    public function setQuantity($quantity): self
     {
         $this->quantity = $quantity;
+
         return $this;
     }
 
     /**
+     * Returns the price excl vat.
+     *
      * @return float
      */
-    public function getPrice() : float
+    public function getPrice(): float
     {
         return $this->price;
     }
 
     /**
      * @param float $price
+     *
      * @return PaymentLine
      */
-    public function setPrice($price) : self
+    public function setPrice($price): self
     {
         $this->price = $price;
+
         return $this;
     }
 
     /**
-     * Returns the VAT percentage
+     * Returns the VAT percentage.
      *
      * @return int
      */
-    public function getVat() : int
+    public function getVat(): int
     {
         return $this->vat;
     }
 
     /**
      * @param int $vat
+     *
      * @return PaymentLine
      */
-    public function setVat($vat) : self
+    public function setVat($vat): self
     {
         $this->vat = $vat;
+
         return $this;
     }
 
     /**
      * @return PaymentRequest
      */
-    public function getPayment() : PaymentRequest
+    public function getPayment(): PaymentRequest
     {
         return $this->payment;
     }
 
     /**
      * @param PaymentRequest $payment
+     *
      * @return PaymentLine
      */
-    public function setPayment(PaymentRequest $payment) : self
+    public function setPayment(PaymentRequest $payment): self
     {
         $this->payment = $payment;
+
         return $this;
     }
 }

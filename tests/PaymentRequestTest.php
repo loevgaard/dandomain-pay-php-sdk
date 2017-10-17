@@ -77,7 +77,7 @@ final class PaymentRequestTest extends TestCase
             'APIBasketProdName2' => 'T-Shirt Large',
             'APIBasketProdAmount2' => '1',
             'APIBasketProdPrice2' => '119,80',
-            'APIBasketProdVAT2' => '25'
+            'APIBasketProdVAT2' => '25',
         ];
         $request = ServerRequestFactory::fromGlobals($serverRequest, null, $postRequest);
 
@@ -115,19 +115,19 @@ final class PaymentRequestTest extends TestCase
         $this->assertEquals($postRequest['APICallBackServerUrl'], $paymentRequest->getCallBackServerUrl());
 
         $this->assertInternalType('int', $paymentRequest->getLanguageId());
-        $this->assertEquals((int)$postRequest['APILanguageID'], $paymentRequest->getLanguageId());
+        $this->assertEquals((int) $postRequest['APILanguageID'], $paymentRequest->getLanguageId());
 
         $this->assertInternalType('bool', $paymentRequest->isTestMode());
         $this->assertEquals(false, $paymentRequest->isTestMode());
 
         $this->assertInternalType('int', $paymentRequest->getPaymentGatewayCurrencyCode());
         $this->assertEquals(
-            (int)$postRequest['APIPayGatewayCurrCode'],
+            (int) $postRequest['APIPayGatewayCurrCode'],
             $paymentRequest->getPaymentGatewayCurrencyCode()
         );
 
         $this->assertInternalType('int', $paymentRequest->getCardTypeId());
-        $this->assertEquals((int)$postRequest['APICardTypeID'], $paymentRequest->getCardTypeId());
+        $this->assertEquals((int) $postRequest['APICardTypeID'], $paymentRequest->getCardTypeId());
 
         $this->assertInternalType('string', $paymentRequest->getCustomerRekvNr());
         $this->assertEquals($postRequest['APICRekvNr'], $paymentRequest->getCustomerRekvNr());
@@ -172,7 +172,7 @@ final class PaymentRequestTest extends TestCase
         $this->assertEquals($postRequest['APICcvrnr'], $paymentRequest->getCustomerCvrnr());
 
         $this->assertInternalType('int', $paymentRequest->getCustomerCustTypeId());
-        $this->assertEquals((int)$postRequest['APICCustTypeID'], $paymentRequest->getCustomerCustTypeId());
+        $this->assertEquals((int) $postRequest['APICCustTypeID'], $paymentRequest->getCustomerCustTypeId());
 
         $this->assertInternalType('string', $paymentRequest->getCustomerEan());
         $this->assertEquals($postRequest['APICEAN'], $paymentRequest->getCustomerEan());
@@ -211,7 +211,7 @@ final class PaymentRequestTest extends TestCase
         $this->assertEquals($postRequest['APIDCity'], $paymentRequest->getDeliveryCity());
 
         $this->assertInternalType('int', $paymentRequest->getDeliveryCountryID());
-        $this->assertEquals((int)$postRequest['APIDCountryID'], $paymentRequest->getDeliveryCountryID());
+        $this->assertEquals((int) $postRequest['APIDCountryID'], $paymentRequest->getDeliveryCountryID());
 
         $this->assertInternalType('string', $paymentRequest->getDeliveryCountry());
         $this->assertEquals($postRequest['APIDCountry'], $paymentRequest->getDeliveryCountry());
@@ -261,7 +261,7 @@ final class PaymentRequestTest extends TestCase
             $productNumber = $postRequest['APIBasketProdNumber'.$i];
             $name = $postRequest['APIBasketProdName'.$i];
             $price = PaymentRequest::currencyStringToFloat($postRequest['APIBasketProdPrice'.$i]);
-            $vat = (int)$postRequest['APIBasketProdVAT'.$i];
+            $vat = (int) $postRequest['APIBasketProdVAT'.$i];
 
             $this->assertEquals($qty, $paymentLine->getQuantity());
             $this->assertEquals($productNumber, $paymentLine->getProductNumber());
@@ -269,7 +269,7 @@ final class PaymentRequestTest extends TestCase
             $this->assertEquals($price, $paymentLine->getPrice());
             $this->assertEquals($vat, $paymentLine->getVat());
 
-            $i++;
+            ++$i;
         }
     }
 
