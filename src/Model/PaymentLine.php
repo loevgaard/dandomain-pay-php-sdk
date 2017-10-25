@@ -1,9 +1,8 @@
 <?php
 
-namespace Loevgaard\Dandomain\Pay\PaymentRequest;
+namespace Loevgaard\Dandomain\Pay\Model;
 
 use Brick\Math\BigDecimal;
-use Loevgaard\Dandomain\Pay\PaymentRequest;
 
 class PaymentLine
 {
@@ -37,7 +36,7 @@ class PaymentLine
     protected $vat;
 
     /**
-     * @var PaymentRequest
+     * @var Payment
      */
     protected $payment;
 
@@ -176,19 +175,19 @@ class PaymentLine
     }
 
     /**
-     * @return PaymentRequest
+     * @return Payment
      */
-    public function getPayment(): PaymentRequest
+    public function getPayment(): Payment
     {
         return $this->payment;
     }
 
     /**
-     * @param PaymentRequest $payment
+     * @param Payment $payment
      *
      * @return PaymentLine
      */
-    public function setPayment(PaymentRequest $payment): self
+    public function setPayment(Payment $payment): self
     {
         $this->payment = $payment;
 

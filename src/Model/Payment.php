@@ -1,11 +1,10 @@
 <?php
 
-namespace Loevgaard\Dandomain\Pay;
+namespace Loevgaard\Dandomain\Pay\Model;
 
-use Loevgaard\Dandomain\Pay\PaymentRequest\PaymentLine;
 use Psr\Http\Message\ServerRequestInterface;
 
-class PaymentRequest
+class Payment
 {
     /**
      * @var string
@@ -297,69 +296,69 @@ class PaymentRequest
         $this->paymentLines = [];
     }
 
-    public function populateFromRequest(ServerRequestInterface $request)
+    public static function createFromRequest(ServerRequestInterface $request) : Payment
     {
         $body = $request->getParsedBody();
         $body = is_array($body) ? $body : [];
 
-        $this->setApiKey($body['APIkey'] ?? '');
-        $this->setMerchant($body['APIMerchant'] ?? '');
-        $this->setOrderId($body['APIOrderID'] ?? 0);
-        $this->setSessionId($body['APISessionID'] ?? '');
-        $this->setCurrencySymbol($body['APICurrencySymbol'] ?? '');
-        $this->setTotalAmount(static::currencyStringToFloat($body['APITotalAmount'] ?? '0.00', 'APITotalAmount'));
-        $this->setCallBackUrl($body['APICallBackUrl'] ?? '');
-        $this->setFullCallBackOkUrl($body['APIFullCallBackOKUrl'] ?? '');
-        $this->setCallBackOkUrl($body['APICallBackOKUrl'] ?? '');
-        $this->setCallBackServerUrl($body['APICallBackServerUrl'] ?? '');
-        $this->setLanguageId(isset($body['APILanguageID']) ? (int) $body['APILanguageID'] : 0);
-        $this->setTestMode(isset($body['APITestMode']) && 'True' === $body['APITestMode']);
-        $this->setPaymentGatewayCurrencyCode(
-            isset($body['APIPayGatewayCurrCode']) ? (int) $body['APIPayGatewayCurrCode'] : 0
-        );
-        $this->setCardTypeId(isset($body['APICardTypeID']) ? (int) $body['APICardTypeID'] : 0);
-        $this->setCustomerRekvNr($body['APICRekvNr'] ?? '');
-        $this->setCustomerName($body['APICName'] ?? '');
-        $this->setCustomerCompany($body['APICCompany'] ?? '');
-        $this->setCustomerAddress($body['APICAddress'] ?? '');
-        $this->setCustomerAddress2($body['APICAddress2'] ?? '');
-        $this->setCustomerZipCode($body['APICZipCode'] ?? '');
-        $this->setCustomerCity($body['APICCity'] ?? '');
-        $this->setCustomerCountryId(isset($body['APICCountryID']) ? (int) $body['APICCountryID'] : 0);
-        $this->setCustomerCountry($body['APICCountry'] ?? '');
-        $this->setCustomerPhone($body['APICPhone'] ?? '');
-        $this->setCustomerFax($body['APICFax'] ?? '');
-        $this->setCustomerEmail($body['APICEmail'] ?? '');
-        $this->setCustomerNote($body['APICNote'] ?? '');
-        $this->setCustomerCvrnr($body['APICcvrnr'] ?? '');
-        $this->setCustomerCustTypeId(isset($body['APICCustTypeID']) ? (int) $body['APICCustTypeID'] : 0);
-        $this->setCustomerEan($body['APICEAN'] ?? '');
-        $this->setCustomerRes1($body['APICres1'] ?? '');
-        $this->setCustomerRes2($body['APICres2'] ?? '');
-        $this->setCustomerRes3($body['APICres3'] ?? '');
-        $this->setCustomerRes4($body['APICres4'] ?? '');
-        $this->setCustomerRes5($body['APICres5'] ?? '');
-        $this->setDeliveryName($body['APIDName'] ?? '');
-        $this->setDeliveryCompany($body['APIDCompany'] ?? '');
-        $this->setDeliveryAddress($body['APIDAddress'] ?? '');
-        $this->setDeliveryAddress2($body['APIDAddress2'] ?? '');
-        $this->setDeliveryZipCode($body['APIDZipCode'] ?? '');
-        $this->setDeliveryCity($body['APIDCity'] ?? '');
-        $this->setDeliveryCountryID(isset($body['APIDCountryID']) ? (int) $body['APIDCountryID'] : 0);
-        $this->setDeliveryCountry($body['APIDCountry'] ?? '');
-        $this->setDeliveryPhone($body['APIDPhone'] ?? '');
-        $this->setDeliveryFax($body['APIDFax'] ?? '');
-        $this->setDeliveryEmail($body['APIDEmail'] ?? '');
-        $this->setDeliveryEan($body['APIDean'] ?? '');
-        $this->setShippingMethod($body['APIShippingMethod'] ?? '');
-        $this->setShippingMethodId(isset($body['APIShippingMethodID']) ? (int)$body['APIShippingMethodID'] : 0);
-        $this->setShippingFee(static::currencyStringToFloat($body['APIShippingFee'] ?? '0.00', 'APIShippingFee'));
-        $this->setPaymentMethod($body['APIPayMethod'] ?? '');
-        $this->setPaymentMethodId(isset($body['APIPayMethodID']) ? (int)$body['APIPayMethodID'] : 0);
-        $this->setPaymentFee(static::currencyStringToFloat($body['APIPayFee'] ?? '0.00', 'APIPayFee'));
-        $this->setCustomerIp($body['APICIP'] ?? '');
-        $this->setLoadBalancerRealIp($body['APILoadBalancerRealIP'] ?? '');
-        $this->setReferrer($request->hasHeader('referer') ? $request->getHeaderLine('referer') : '');
+        $payment = new static();
+
+        $payment->setApiKey($body['APIkey'] ?? '');
+        $payment->setMerchant($body['APIMerchant'] ?? '');
+        $payment->setOrderId($body['APIOrderID'] ?? 0);
+        $payment->setSessionId($body['APISessionID'] ?? '');
+        $payment->setCurrencySymbol($body['APICurrencySymbol'] ?? '');
+        $payment->setTotalAmount(static::currencyStringToFloat($body['APITotalAmount'] ?? '0.00', 'APITotalAmount'));
+        $payment->setCallBackUrl($body['APICallBackUrl'] ?? '');
+        $payment->setFullCallBackOkUrl($body['APIFullCallBackOKUrl'] ?? '');
+        $payment->setCallBackOkUrl($body['APICallBackOKUrl'] ?? '');
+        $payment->setCallBackServerUrl($body['APICallBackServerUrl'] ?? '');
+        $payment->setLanguageId(isset($body['APILanguageID']) ? (int) $body['APILanguageID'] : 0);
+        $payment->setTestMode(isset($body['APITestMode']) && 'True' === $body['APITestMode']);
+        $payment->setPaymentGatewayCurrencyCode(isset($body['APIPayGatewayCurrCode']) ? (int) $body['APIPayGatewayCurrCode'] : 0);
+        $payment->setCardTypeId(isset($body['APICardTypeID']) ? (int) $body['APICardTypeID'] : 0);
+        $payment->setCustomerRekvNr($body['APICRekvNr'] ?? '');
+        $payment->setCustomerName($body['APICName'] ?? '');
+        $payment->setCustomerCompany($body['APICCompany'] ?? '');
+        $payment->setCustomerAddress($body['APICAddress'] ?? '');
+        $payment->setCustomerAddress2($body['APICAddress2'] ?? '');
+        $payment->setCustomerZipCode($body['APICZipCode'] ?? '');
+        $payment->setCustomerCity($body['APICCity'] ?? '');
+        $payment->setCustomerCountryId(isset($body['APICCountryID']) ? (int) $body['APICCountryID'] : 0);
+        $payment->setCustomerCountry($body['APICCountry'] ?? '');
+        $payment->setCustomerPhone($body['APICPhone'] ?? '');
+        $payment->setCustomerFax($body['APICFax'] ?? '');
+        $payment->setCustomerEmail($body['APICEmail'] ?? '');
+        $payment->setCustomerNote($body['APICNote'] ?? '');
+        $payment->setCustomerCvrnr($body['APICcvrnr'] ?? '');
+        $payment->setCustomerCustTypeId(isset($body['APICCustTypeID']) ? (int) $body['APICCustTypeID'] : 0);
+        $payment->setCustomerEan($body['APICEAN'] ?? '');
+        $payment->setCustomerRes1($body['APICres1'] ?? '');
+        $payment->setCustomerRes2($body['APICres2'] ?? '');
+        $payment->setCustomerRes3($body['APICres3'] ?? '');
+        $payment->setCustomerRes4($body['APICres4'] ?? '');
+        $payment->setCustomerRes5($body['APICres5'] ?? '');
+        $payment->setDeliveryName($body['APIDName'] ?? '');
+        $payment->setDeliveryCompany($body['APIDCompany'] ?? '');
+        $payment->setDeliveryAddress($body['APIDAddress'] ?? '');
+        $payment->setDeliveryAddress2($body['APIDAddress2'] ?? '');
+        $payment->setDeliveryZipCode($body['APIDZipCode'] ?? '');
+        $payment->setDeliveryCity($body['APIDCity'] ?? '');
+        $payment->setDeliveryCountryID(isset($body['APIDCountryID']) ? (int) $body['APIDCountryID'] : 0);
+        $payment->setDeliveryCountry($body['APIDCountry'] ?? '');
+        $payment->setDeliveryPhone($body['APIDPhone'] ?? '');
+        $payment->setDeliveryFax($body['APIDFax'] ?? '');
+        $payment->setDeliveryEmail($body['APIDEmail'] ?? '');
+        $payment->setDeliveryEan($body['APIDean'] ?? '');
+        $payment->setShippingMethod($body['APIShippingMethod'] ?? '');
+        $payment->setShippingMethodId(isset($body['APIShippingMethodID']) ? (int)$body['APIShippingMethodID'] : 0);
+        $payment->setShippingFee(static::currencyStringToFloat($body['APIShippingFee'] ?? '0.00', 'APIShippingFee'));
+        $payment->setPaymentMethod($body['APIPayMethod'] ?? '');
+        $payment->setPaymentMethodId(isset($body['APIPayMethodID']) ? (int)$body['APIPayMethodID'] : 0);
+        $payment->setPaymentFee(static::currencyStringToFloat($body['APIPayFee'] ?? '0.00', 'APIPayFee'));
+        $payment->setCustomerIp($body['APICIP'] ?? '');
+        $payment->setLoadBalancerRealIp($body['APILoadBalancerRealIP'] ?? '');
+        $payment->setReferrer($request->hasHeader('referer') ? $request->getHeaderLine('referer') : '');
 
         // populate order lines
         $i = 1;
@@ -384,10 +383,12 @@ class PaymentRequest
                 ->setPrice($price)
                 ->setVat($vat)
             ;
-            $this->addPaymentLine($paymentLine);
+            $payment->addPaymentLine($paymentLine);
 
             ++$i;
         }
+
+        return $payment;
     }
 
     /**

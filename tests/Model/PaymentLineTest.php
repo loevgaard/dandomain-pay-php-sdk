@@ -1,15 +1,14 @@
 <?php
 
-namespace Loevgaard\Dandomain\Pay\PaymentRequest;
+namespace Loevgaard\Dandomain\Pay\Model;
 
-use Loevgaard\Dandomain\Pay\PaymentRequest;
 use PHPUnit\Framework\TestCase;
 
 final class PaymentLineTest extends TestCase
 {
     public function testGettersSetters()
     {
-        $payment = new PaymentRequest();
+        $payment = new Payment();
 
         $paymentLine = new PaymentLine();
         $paymentLine

@@ -1,16 +1,13 @@
 <?php
 
-namespace Loevgaard\Dandomain\Pay;
+namespace Loevgaard\Dandomain\Pay\Helper;
 
-use Psr\Http\Message\ServerRequestInterface;
+use Loevgaard\Dandomain\Pay\Model\Payment;
 
 /**
- * The Handler handles the request from Dandomain, typically a POST request with the order specific parameters
- * and turns that request into a PaymentRequest object.
- *
- * Also it provides helper methods for checking checksums
+ * The checksum helper will assist in creating checksums and also verifying checksums based on a payment
  */
-class Handler
+class ChecksumHelper
 {
     /**
      * @var string
@@ -33,16 +30,13 @@ class Handler
     protected $checksum2;
 
     /**
-     * @var PaymentRequest
+     * @var Payment
      */
-    protected $paymentRequest;
+    protected $payment;
 
-    public function __construct(ServerRequestInterface $request, string $sharedKey1, string $sharedKey2)
+    public function __construct(Payment $payment, string $sharedKey1, string $sharedKey2)
     {
-        $paymentRequest = new PaymentRequest();
-        $paymentRequest->populateFromRequest($request);
-
-        $this->paymentRequest = $paymentRequest;
+        $this->payment = $payment;
         $this->sharedKey1 = $sharedKey1;
         $this->sharedKey2 = $sharedKey2;
     }
@@ -54,7 +48,7 @@ class Handler
      */
     public function checksumMatches(): bool
     {
-        return $this->paymentRequest->getApiKey() === $this->getChecksum1();
+        return $this->payment->getApiKey() === $this->getChecksum1();
     }
 
     /**
@@ -64,10 +58,10 @@ class Handler
     {
         if (!$this->checksum1) {
             $this->checksum1 = static::generateChecksum1(
-                $this->paymentRequest->getOrderId(),
-                $this->paymentRequest->getTotalAmount(),
+                $this->payment->getOrderId(),
+                $this->payment->getTotalAmount(),
                 $this->sharedKey1,
-                $this->paymentRequest->getPaymentGatewayCurrencyCode()
+                $this->payment->getPaymentGatewayCurrencyCode()
             );
         }
 
@@ -81,9 +75,9 @@ class Handler
     {
         if (!$this->checksum2) {
             $this->checksum2 = static::generateChecksum2(
-                $this->paymentRequest->getOrderId(),
+                $this->payment->getOrderId(),
                 $this->sharedKey2,
-                $this->paymentRequest->getPaymentGatewayCurrencyCode()
+                $this->payment->getPaymentGatewayCurrencyCode()
             );
         }
 
@@ -120,25 +114,5 @@ class Handler
     public static function generateChecksum2(int $orderId, string $sharedKey, int $currency): string
     {
         return strtolower(md5($orderId.'+'.$sharedKey.'+'.$currency));
-    }
-
-    /**
-     * @return PaymentRequest
-     */
-    public function getPaymentRequest(): PaymentRequest
-    {
-        return $this->paymentRequest;
-    }
-
-    /**
-     * @param PaymentRequest $paymentRequest
-     *
-     * @return Handler
-     */
-    public function setPaymentRequest(PaymentRequest $paymentRequest): self
-    {
-        $this->paymentRequest = $paymentRequest;
-
-        return $this;
     }
 }
