@@ -430,7 +430,7 @@ class Payment
     /**
      * @param string $apiKey
      *
-     * @return PaymentRequest
+     * @return Payment
      */
     public function setApiKey(string $apiKey): self
     {
@@ -450,7 +450,7 @@ class Payment
     /**
      * @param string $merchant
      *
-     * @return PaymentRequest
+     * @return Payment
      */
     public function setMerchant(string $merchant): self
     {
@@ -470,7 +470,7 @@ class Payment
     /**
      * @param int $orderId
      *
-     * @return PaymentRequest
+     * @return Payment
      */
     public function setOrderId(int $orderId): self
     {
@@ -490,7 +490,7 @@ class Payment
     /**
      * @param string $sessionId
      *
-     * @return PaymentRequest
+     * @return Payment
      */
     public function setSessionId(string $sessionId): self
     {
@@ -510,7 +510,7 @@ class Payment
     /**
      * @param string $currencySymbol
      *
-     * @return PaymentRequest
+     * @return Payment
      */
     public function setCurrencySymbol(string $currencySymbol): self
     {
@@ -530,7 +530,7 @@ class Payment
     /**
      * @param float $totalAmount
      *
-     * @return PaymentRequest
+     * @return Payment
      */
     public function setTotalAmount(float $totalAmount): self
     {
@@ -550,7 +550,7 @@ class Payment
     /**
      * @param string $callBackUrl
      *
-     * @return PaymentRequest
+     * @return Payment
      */
     public function setCallBackUrl(string $callBackUrl): self
     {
@@ -570,7 +570,7 @@ class Payment
     /**
      * @param string $fullCallBackOkUrl
      *
-     * @return PaymentRequest
+     * @return Payment
      */
     public function setFullCallBackOkUrl(string $fullCallBackOkUrl): self
     {
@@ -590,7 +590,7 @@ class Payment
     /**
      * @param string $callBackOkUrl
      *
-     * @return PaymentRequest
+     * @return Payment
      */
     public function setCallBackOkUrl(string $callBackOkUrl): self
     {
@@ -610,7 +610,7 @@ class Payment
     /**
      * @param string $callBackServerUrl
      *
-     * @return PaymentRequest
+     * @return Payment
      */
     public function setCallBackServerUrl(string $callBackServerUrl): self
     {
@@ -630,7 +630,7 @@ class Payment
     /**
      * @param int $languageId
      *
-     * @return PaymentRequest
+     * @return Payment
      */
     public function setLanguageId(int $languageId): self
     {
@@ -650,7 +650,7 @@ class Payment
     /**
      * @param bool $testMode
      *
-     * @return PaymentRequest
+     * @return Payment
      */
     public function setTestMode(bool $testMode): self
     {
@@ -670,7 +670,7 @@ class Payment
     /**
      * @param int $paymentGatewayCurrencyCode
      *
-     * @return PaymentRequest
+     * @return Payment
      */
     public function setPaymentGatewayCurrencyCode(int $paymentGatewayCurrencyCode): self
     {
@@ -690,7 +690,7 @@ class Payment
     /**
      * @param int $cardTypeId
      *
-     * @return PaymentRequest
+     * @return Payment
      */
     public function setCardTypeId(int $cardTypeId): self
     {
@@ -710,7 +710,7 @@ class Payment
     /**
      * @param string $customerRekvNr
      *
-     * @return PaymentRequest
+     * @return Payment
      */
     public function setCustomerRekvNr(string $customerRekvNr): self
     {
@@ -730,7 +730,7 @@ class Payment
     /**
      * @param string $customerName
      *
-     * @return PaymentRequest
+     * @return Payment
      */
     public function setCustomerName(string $customerName): self
     {
@@ -750,7 +750,7 @@ class Payment
     /**
      * @param string $customerCompany
      *
-     * @return PaymentRequest
+     * @return Payment
      */
     public function setCustomerCompany(string $customerCompany): self
     {
@@ -770,7 +770,7 @@ class Payment
     /**
      * @param string $customerAddress
      *
-     * @return PaymentRequest
+     * @return Payment
      */
     public function setCustomerAddress(string $customerAddress): self
     {
@@ -790,7 +790,7 @@ class Payment
     /**
      * @param string $customerAddress2
      *
-     * @return PaymentRequest
+     * @return Payment
      */
     public function setCustomerAddress2(string $customerAddress2): self
     {
@@ -810,7 +810,7 @@ class Payment
     /**
      * @param string $customerZipCode
      *
-     * @return PaymentRequest
+     * @return Payment
      */
     public function setCustomerZipCode(string $customerZipCode): self
     {
@@ -830,7 +830,7 @@ class Payment
     /**
      * @param string $customerCity
      *
-     * @return PaymentRequest
+     * @return Payment
      */
     public function setCustomerCity(string $customerCity): self
     {
@@ -850,7 +850,7 @@ class Payment
     /**
      * @param int $customerCountryId
      *
-     * @return PaymentRequest
+     * @return Payment
      */
     public function setCustomerCountryId(int $customerCountryId): self
     {
@@ -870,7 +870,7 @@ class Payment
     /**
      * @param string $customerCountry
      *
-     * @return PaymentRequest
+     * @return Payment
      */
     public function setCustomerCountry(string $customerCountry): self
     {
@@ -890,7 +890,7 @@ class Payment
     /**
      * @param string $customerPhone
      *
-     * @return PaymentRequest
+     * @return Payment
      */
     public function setCustomerPhone(string $customerPhone): self
     {
@@ -910,7 +910,7 @@ class Payment
     /**
      * @param string $customerFax
      *
-     * @return PaymentRequest
+     * @return Payment
      */
     public function setCustomerFax(string $customerFax): self
     {
@@ -930,7 +930,7 @@ class Payment
     /**
      * @param string $customerEmail
      *
-     * @return PaymentRequest
+     * @return Payment
      */
     public function setCustomerEmail(string $customerEmail): self
     {
@@ -950,7 +950,7 @@ class Payment
     /**
      * @param string $customerNote
      *
-     * @return PaymentRequest
+     * @return Payment
      */
     public function setCustomerNote(string $customerNote): self
     {
@@ -970,7 +970,7 @@ class Payment
     /**
      * @param string $customerCvrnr
      *
-     * @return PaymentRequest
+     * @return Payment
      */
     public function setCustomerCvrnr(string $customerCvrnr): self
     {
@@ -990,7 +990,7 @@ class Payment
     /**
      * @param int $customerCustTypeId
      *
-     * @return PaymentRequest
+     * @return Payment
      */
     public function setCustomerCustTypeId(int $customerCustTypeId): self
     {
@@ -1010,7 +1010,7 @@ class Payment
     /**
      * @param string $customerEan
      *
-     * @return PaymentRequest
+     * @return Payment
      */
     public function setCustomerEan(string $customerEan): self
     {
@@ -1030,7 +1030,7 @@ class Payment
     /**
      * @param string $customerRes1
      *
-     * @return PaymentRequest
+     * @return Payment
      */
     public function setCustomerRes1(string $customerRes1): self
     {
@@ -1050,7 +1050,7 @@ class Payment
     /**
      * @param string $customerRes2
      *
-     * @return PaymentRequest
+     * @return Payment
      */
     public function setCustomerRes2(string $customerRes2): self
     {
@@ -1070,7 +1070,7 @@ class Payment
     /**
      * @param string $customerRes3
      *
-     * @return PaymentRequest
+     * @return Payment
      */
     public function setCustomerRes3(string $customerRes3): self
     {
@@ -1090,7 +1090,7 @@ class Payment
     /**
      * @param string $customerRes4
      *
-     * @return PaymentRequest
+     * @return Payment
      */
     public function setCustomerRes4(string $customerRes4): self
     {
@@ -1110,7 +1110,7 @@ class Payment
     /**
      * @param string $customerRes5
      *
-     * @return PaymentRequest
+     * @return Payment
      */
     public function setCustomerRes5(string $customerRes5): self
     {
@@ -1130,7 +1130,7 @@ class Payment
     /**
      * @param string $customerIp
      *
-     * @return PaymentRequest
+     * @return Payment
      */
     public function setCustomerIp(string $customerIp): self
     {
@@ -1150,7 +1150,7 @@ class Payment
     /**
      * @param string $deliveryName
      *
-     * @return PaymentRequest
+     * @return Payment
      */
     public function setDeliveryName(string $deliveryName): self
     {
@@ -1170,7 +1170,7 @@ class Payment
     /**
      * @param string $deliveryCompany
      *
-     * @return PaymentRequest
+     * @return Payment
      */
     public function setDeliveryCompany(string $deliveryCompany): self
     {
@@ -1190,7 +1190,7 @@ class Payment
     /**
      * @param string $deliveryAddress
      *
-     * @return PaymentRequest
+     * @return Payment
      */
     public function setDeliveryAddress(string $deliveryAddress): self
     {
@@ -1210,7 +1210,7 @@ class Payment
     /**
      * @param string $deliveryAddress2
      *
-     * @return PaymentRequest
+     * @return Payment
      */
     public function setDeliveryAddress2(string $deliveryAddress2): self
     {
@@ -1230,7 +1230,7 @@ class Payment
     /**
      * @param string $deliveryZipCode
      *
-     * @return PaymentRequest
+     * @return Payment
      */
     public function setDeliveryZipCode(string $deliveryZipCode): self
     {
@@ -1250,7 +1250,7 @@ class Payment
     /**
      * @param string $deliveryCity
      *
-     * @return PaymentRequest
+     * @return Payment
      */
     public function setDeliveryCity(string $deliveryCity): self
     {
@@ -1270,7 +1270,7 @@ class Payment
     /**
      * @param int $deliveryCountryID
      *
-     * @return PaymentRequest
+     * @return Payment
      */
     public function setDeliveryCountryID(int $deliveryCountryID): self
     {
@@ -1290,7 +1290,7 @@ class Payment
     /**
      * @param string $deliveryCountry
      *
-     * @return PaymentRequest
+     * @return Payment
      */
     public function setDeliveryCountry(string $deliveryCountry): self
     {
@@ -1310,7 +1310,7 @@ class Payment
     /**
      * @param string $deliveryPhone
      *
-     * @return PaymentRequest
+     * @return Payment
      */
     public function setDeliveryPhone(string $deliveryPhone): self
     {
@@ -1330,7 +1330,7 @@ class Payment
     /**
      * @param string $deliveryFax
      *
-     * @return PaymentRequest
+     * @return Payment
      */
     public function setDeliveryFax(string $deliveryFax): self
     {
@@ -1350,7 +1350,7 @@ class Payment
     /**
      * @param string $deliveryEmail
      *
-     * @return PaymentRequest
+     * @return Payment
      */
     public function setDeliveryEmail(string $deliveryEmail): self
     {
@@ -1370,7 +1370,7 @@ class Payment
     /**
      * @param string $deliveryEan
      *
-     * @return PaymentRequest
+     * @return Payment
      */
     public function setDeliveryEan(string $deliveryEan): self
     {
@@ -1390,7 +1390,7 @@ class Payment
     /**
      * @param string $shippingMethod
      *
-     * @return PaymentRequest
+     * @return Payment
      */
     public function setShippingMethod(string $shippingMethod): self
     {
@@ -1409,7 +1409,7 @@ class Payment
 
     /**
      * @param int $shippingMethodId
-     * @return PaymentRequest
+     * @return Payment
      */
     public function setShippingMethodId(int $shippingMethodId) : self
     {
@@ -1428,7 +1428,7 @@ class Payment
     /**
      * @param float $shippingFee
      *
-     * @return PaymentRequest
+     * @return Payment
      */
     public function setShippingFee(float $shippingFee): self
     {
@@ -1448,7 +1448,7 @@ class Payment
     /**
      * @param string $paymentMethod
      *
-     * @return PaymentRequest
+     * @return Payment
      */
     public function setPaymentMethod(string $paymentMethod): self
     {
@@ -1467,7 +1467,7 @@ class Payment
 
     /**
      * @param int $paymentMethodId
-     * @return PaymentRequest
+     * @return Payment
      */
     public function setPaymentMethodId(int $paymentMethodId) : self
     {
@@ -1486,7 +1486,7 @@ class Payment
     /**
      * @param float $paymentFee
      *
-     * @return PaymentRequest
+     * @return Payment
      */
     public function setPaymentFee(float $paymentFee): self
     {
@@ -1506,7 +1506,7 @@ class Payment
     /**
      * @param string $loadBalancerRealIp
      *
-     * @return PaymentRequest
+     * @return Payment
      */
     public function setLoadBalancerRealIp(string $loadBalancerRealIp): self
     {
@@ -1526,7 +1526,7 @@ class Payment
     /**
      * @param string $referrer
      *
-     * @return PaymentRequest
+     * @return Payment
      */
     public function setReferrer(string $referrer): self
     {
@@ -1546,7 +1546,7 @@ class Payment
     /**
      * @param PaymentLine[]|iterable $paymentLines
      *
-     * @return PaymentRequest
+     * @return Payment
      */
     public function setPaymentLines(iterable $paymentLines): self
     {
@@ -1558,7 +1558,7 @@ class Payment
     /**
      * @param PaymentLine $paymentLine
      *
-     * @return PaymentRequest
+     * @return Payment
      */
     public function addPaymentLine(PaymentLine $paymentLine): self
     {
