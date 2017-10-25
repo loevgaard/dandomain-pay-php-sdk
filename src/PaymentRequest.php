@@ -411,7 +411,7 @@ class PaymentRequest
      */
     public function getApiKey(): string
     {
-        return $this->apiKey;
+        return (string)$this->apiKey;
     }
 
     /**
@@ -431,7 +431,7 @@ class PaymentRequest
      */
     public function getMerchant(): string
     {
-        return $this->merchant;
+        return (string)$this->merchant;
     }
 
     /**
@@ -451,7 +451,7 @@ class PaymentRequest
      */
     public function getOrderId(): int
     {
-        return $this->orderId;
+        return (int)$this->orderId;
     }
 
     /**
@@ -471,7 +471,7 @@ class PaymentRequest
      */
     public function getSessionId(): string
     {
-        return $this->sessionId;
+        return (string)$this->sessionId;
     }
 
     /**
@@ -491,7 +491,7 @@ class PaymentRequest
      */
     public function getCurrencySymbol(): string
     {
-        return $this->currencySymbol;
+        return (string)$this->currencySymbol;
     }
 
     /**
@@ -511,7 +511,7 @@ class PaymentRequest
      */
     public function getTotalAmount(): float
     {
-        return $this->totalAmount;
+        return (float)$this->totalAmount;
     }
 
     /**
@@ -531,7 +531,7 @@ class PaymentRequest
      */
     public function getCallBackUrl(): string
     {
-        return $this->callBackUrl;
+        return (string)$this->callBackUrl;
     }
 
     /**
@@ -551,7 +551,7 @@ class PaymentRequest
      */
     public function getFullCallBackOkUrl(): string
     {
-        return $this->fullCallBackOkUrl;
+        return (string)$this->fullCallBackOkUrl;
     }
 
     /**
@@ -571,7 +571,7 @@ class PaymentRequest
      */
     public function getCallBackOkUrl(): string
     {
-        return $this->callBackOkUrl;
+        return (string)$this->callBackOkUrl;
     }
 
     /**
@@ -591,7 +591,7 @@ class PaymentRequest
      */
     public function getCallBackServerUrl(): string
     {
-        return $this->callBackServerUrl;
+        return (string)$this->callBackServerUrl;
     }
 
     /**
@@ -611,7 +611,7 @@ class PaymentRequest
      */
     public function getLanguageId(): int
     {
-        return $this->languageId;
+        return (int)$this->languageId;
     }
 
     /**
@@ -631,7 +631,7 @@ class PaymentRequest
      */
     public function isTestMode(): bool
     {
-        return $this->testMode;
+        return (bool)$this->testMode;
     }
 
     /**
@@ -649,9 +649,9 @@ class PaymentRequest
     /**
      * @return int
      */
-    public function getPaymentGatewayCurrencyCode()
+    public function getPaymentGatewayCurrencyCode() : int
     {
-        return $this->paymentGatewayCurrencyCode;
+        return (int)$this->paymentGatewayCurrencyCode;
     }
 
     /**
@@ -669,9 +669,9 @@ class PaymentRequest
     /**
      * @return int
      */
-    public function getCardTypeId()
+    public function getCardTypeId() : int
     {
-        return $this->cardTypeId;
+        return (int)$this->cardTypeId;
     }
 
     /**
@@ -691,7 +691,7 @@ class PaymentRequest
      */
     public function getCustomerRekvNr(): string
     {
-        return $this->customerRekvNr;
+        return (string)$this->customerRekvNr;
     }
 
     /**
@@ -711,7 +711,7 @@ class PaymentRequest
      */
     public function getCustomerName(): string
     {
-        return $this->customerName;
+        return (string)$this->customerName;
     }
 
     /**
@@ -731,7 +731,7 @@ class PaymentRequest
      */
     public function getCustomerCompany(): string
     {
-        return $this->customerCompany;
+        return (string)$this->customerCompany;
     }
 
     /**
@@ -751,7 +751,7 @@ class PaymentRequest
      */
     public function getCustomerAddress(): string
     {
-        return $this->customerAddress;
+        return (string)$this->customerAddress;
     }
 
     /**
@@ -771,7 +771,7 @@ class PaymentRequest
      */
     public function getCustomerAddress2(): string
     {
-        return $this->customerAddress2;
+        return (string)$this->customerAddress2;
     }
 
     /**
@@ -791,7 +791,7 @@ class PaymentRequest
      */
     public function getCustomerZipCode(): string
     {
-        return $this->customerZipCode;
+        return (string)$this->customerZipCode;
     }
 
     /**
@@ -811,7 +811,7 @@ class PaymentRequest
      */
     public function getCustomerCity(): string
     {
-        return $this->customerCity;
+        return (string)$this->customerCity;
     }
 
     /**
@@ -829,9 +829,9 @@ class PaymentRequest
     /**
      * @return int
      */
-    public function getCustomerCountryId()
+    public function getCustomerCountryId(): int
     {
-        return $this->customerCountryId;
+        return (string)$this->customerCountryId;
     }
 
     /**
@@ -851,7 +851,7 @@ class PaymentRequest
      */
     public function getCustomerCountry(): string
     {
-        return $this->customerCountry;
+        return (string)$this->customerCountry;
     }
 
     /**
@@ -871,7 +871,7 @@ class PaymentRequest
      */
     public function getCustomerPhone(): string
     {
-        return $this->customerPhone;
+        return (string)$this->customerPhone;
     }
 
     /**
@@ -891,7 +891,7 @@ class PaymentRequest
      */
     public function getCustomerFax(): string
     {
-        return $this->customerFax;
+        return (string)$this->customerFax;
     }
 
     /**
@@ -911,7 +911,7 @@ class PaymentRequest
      */
     public function getCustomerEmail(): string
     {
-        return $this->customerEmail;
+        return (string)$this->customerEmail;
     }
 
     /**
@@ -931,7 +931,7 @@ class PaymentRequest
      */
     public function getCustomerNote(): string
     {
-        return $this->customerNote;
+        return (string)$this->customerNote;
     }
 
     /**
@@ -951,7 +951,7 @@ class PaymentRequest
      */
     public function getCustomerCvrnr(): string
     {
-        return $this->customerCvrnr;
+        return (string)$this->customerCvrnr;
     }
 
     /**
@@ -971,7 +971,7 @@ class PaymentRequest
      */
     public function getCustomerCustTypeId(): int
     {
-        return $this->customerCustTypeId;
+        return (int)$this->customerCustTypeId;
     }
 
     /**
@@ -991,7 +991,7 @@ class PaymentRequest
      */
     public function getCustomerEan(): string
     {
-        return $this->customerEan;
+        return (string)$this->customerEan;
     }
 
     /**
@@ -1011,7 +1011,7 @@ class PaymentRequest
      */
     public function getCustomerRes1(): string
     {
-        return $this->customerRes1;
+        return (string)$this->customerRes1;
     }
 
     /**
@@ -1031,7 +1031,7 @@ class PaymentRequest
      */
     public function getCustomerRes2(): string
     {
-        return $this->customerRes2;
+        return (string)$this->customerRes2;
     }
 
     /**
@@ -1051,7 +1051,7 @@ class PaymentRequest
      */
     public function getCustomerRes3(): string
     {
-        return $this->customerRes3;
+        return (string)$this->customerRes3;
     }
 
     /**
@@ -1071,7 +1071,7 @@ class PaymentRequest
      */
     public function getCustomerRes4(): string
     {
-        return $this->customerRes4;
+        return (string)$this->customerRes4;
     }
 
     /**
@@ -1091,7 +1091,7 @@ class PaymentRequest
      */
     public function getCustomerRes5(): string
     {
-        return $this->customerRes5;
+        return (string)$this->customerRes5;
     }
 
     /**
@@ -1111,7 +1111,7 @@ class PaymentRequest
      */
     public function getCustomerIp(): string
     {
-        return $this->customerIp;
+        return (string)$this->customerIp;
     }
 
     /**
@@ -1131,7 +1131,7 @@ class PaymentRequest
      */
     public function getDeliveryName(): string
     {
-        return $this->deliveryName;
+        return (string)$this->deliveryName;
     }
 
     /**
@@ -1151,7 +1151,7 @@ class PaymentRequest
      */
     public function getDeliveryCompany(): string
     {
-        return $this->deliveryCompany;
+        return (string)$this->deliveryCompany;
     }
 
     /**
@@ -1171,7 +1171,7 @@ class PaymentRequest
      */
     public function getDeliveryAddress(): string
     {
-        return $this->deliveryAddress;
+        return (string)$this->deliveryAddress;
     }
 
     /**
@@ -1191,7 +1191,7 @@ class PaymentRequest
      */
     public function getDeliveryAddress2(): string
     {
-        return $this->deliveryAddress2;
+        return (string)$this->deliveryAddress2;
     }
 
     /**
@@ -1211,7 +1211,7 @@ class PaymentRequest
      */
     public function getDeliveryZipCode(): string
     {
-        return $this->deliveryZipCode;
+        return (string)$this->deliveryZipCode;
     }
 
     /**
@@ -1231,7 +1231,7 @@ class PaymentRequest
      */
     public function getDeliveryCity(): string
     {
-        return $this->deliveryCity;
+        return (string)$this->deliveryCity;
     }
 
     /**
@@ -1249,9 +1249,9 @@ class PaymentRequest
     /**
      * @return int
      */
-    public function getDeliveryCountryID()
+    public function getDeliveryCountryID() : int
     {
-        return $this->deliveryCountryID;
+        return (int)$this->deliveryCountryID;
     }
 
     /**
@@ -1271,7 +1271,7 @@ class PaymentRequest
      */
     public function getDeliveryCountry(): string
     {
-        return $this->deliveryCountry;
+        return (string)$this->deliveryCountry;
     }
 
     /**
@@ -1291,7 +1291,7 @@ class PaymentRequest
      */
     public function getDeliveryPhone(): string
     {
-        return $this->deliveryPhone;
+        return (string)$this->deliveryPhone;
     }
 
     /**
@@ -1311,7 +1311,7 @@ class PaymentRequest
      */
     public function getDeliveryFax(): string
     {
-        return $this->deliveryFax;
+        return (string)$this->deliveryFax;
     }
 
     /**
@@ -1331,7 +1331,7 @@ class PaymentRequest
      */
     public function getDeliveryEmail(): string
     {
-        return $this->deliveryEmail;
+        return (string)$this->deliveryEmail;
     }
 
     /**
@@ -1351,7 +1351,7 @@ class PaymentRequest
      */
     public function getDeliveryEan(): string
     {
-        return $this->deliveryEan;
+        return (string)$this->deliveryEan;
     }
 
     /**
@@ -1371,7 +1371,7 @@ class PaymentRequest
      */
     public function getShippingMethod(): string
     {
-        return $this->shippingMethod;
+        return (string)$this->shippingMethod;
     }
 
     /**
@@ -1391,7 +1391,7 @@ class PaymentRequest
      */
     public function getShippingFee(): float
     {
-        return $this->shippingFee;
+        return (float)$this->shippingFee;
     }
 
     /**
@@ -1411,7 +1411,7 @@ class PaymentRequest
      */
     public function getPaymentMethod(): string
     {
-        return $this->paymentMethod;
+        return (string)$this->paymentMethod;
     }
 
     /**
@@ -1431,7 +1431,7 @@ class PaymentRequest
      */
     public function getPaymentFee(): float
     {
-        return $this->paymentFee;
+        return (float)$this->paymentFee;
     }
 
     /**
@@ -1451,7 +1451,7 @@ class PaymentRequest
      */
     public function getLoadBalancerRealIp(): string
     {
-        return $this->loadBalancerRealIp;
+        return (string)$this->loadBalancerRealIp;
     }
 
     /**
@@ -1471,7 +1471,7 @@ class PaymentRequest
      */
     public function getReferrer(): string
     {
-        return $this->referrer;
+        return (string)$this->referrer;
     }
 
     /**
