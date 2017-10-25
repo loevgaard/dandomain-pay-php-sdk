@@ -253,6 +253,11 @@ class PaymentRequest
     protected $shippingMethod;
 
     /**
+     * @var int
+     */
+    protected $shippingMethodId;
+
+    /**
      * @var float
      */
     protected $shippingFee;
@@ -261,6 +266,11 @@ class PaymentRequest
      * @var string
      */
     protected $paymentMethod;
+
+    /**
+     * @var int
+     */
+    protected $paymentMethodId;
 
     /**
      * @var float
@@ -342,8 +352,10 @@ class PaymentRequest
         $this->setDeliveryEmail($body['APIDEmail'] ?? '');
         $this->setDeliveryEan($body['APIDean'] ?? '');
         $this->setShippingMethod($body['APIShippingMethod'] ?? '');
+        $this->setShippingMethodId(isset($body['APIShippingMethodID']) ? (int)$body['APIShippingMethodID'] : 0);
         $this->setShippingFee(static::currencyStringToFloat($body['APIShippingFee'] ?? '0.00', 'APIShippingFee'));
         $this->setPaymentMethod($body['APIPayMethod'] ?? '');
+        $this->setPaymentMethodId(isset($body['APIPayMethodID']) ? (int)$body['APIPayMethodID'] : 0);
         $this->setPaymentFee(static::currencyStringToFloat($body['APIPayFee'] ?? '0.00', 'APIPayFee'));
         $this->setCustomerIp($body['APICIP'] ?? '');
         $this->setLoadBalancerRealIp($body['APILoadBalancerRealIP'] ?? '');
@@ -1387,6 +1399,24 @@ class PaymentRequest
     }
 
     /**
+     * @return int
+     */
+    public function getShippingMethodId(): ?int
+    {
+        return $this->shippingMethodId;
+    }
+
+    /**
+     * @param int $shippingMethodId
+     * @return PaymentRequest
+     */
+    public function setShippingMethodId(int $shippingMethodId) : self
+    {
+        $this->shippingMethodId = $shippingMethodId;
+        return $this;
+    }
+
+    /**
      * @return float
      */
     public function getShippingFee(): ?float
@@ -1423,6 +1453,24 @@ class PaymentRequest
     {
         $this->paymentMethod = $paymentMethod;
 
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPaymentMethodId(): ?int
+    {
+        return $this->paymentMethodId;
+    }
+
+    /**
+     * @param int $paymentMethodId
+     * @return PaymentRequest
+     */
+    public function setPaymentMethodId(int $paymentMethodId) : self
+    {
+        $this->paymentMethodId = $paymentMethodId;
         return $this;
     }
 
