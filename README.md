@@ -18,28 +18,17 @@ $ composer require loevgaard/dandomain-pay-php-sdk
 ```
 
 ## Usage
-
+### Create Payment from ServerRequestInterface
 ```php
 <?php
-require_once 'vendor/autoload.php';
+use Loevgaard\Dandomain\Pay\Model\Payment;
 
 /**
 * The $request need to implement the PSR7 ServerRequestInterface
  * 
  * @var \Psr\Http\Message\ServerRequestInterface $request
  */
-$request = '';
-$handler = new \Loevgaard\Dandomain\Pay\Handler($request, '[insert shared key 1]', '[insert shared key 2]');
-$paymentRequest = $handler->getPaymentRequest();
-
-var_dump($paymentRequest);
-```
-
-Test if the checksum matches:
-
-```php
-<?php
-var_dump($handler->checksumMatches());
+$payment = Payment::createFromRequest($request);
 ```
 
 ## Change log
