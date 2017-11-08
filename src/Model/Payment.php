@@ -372,7 +372,7 @@ class Payment
             $price = new Money(static::priceStringToInt($body['APIBasketProdPrice'.$i] ?? '0.00', 'APIBasketProdPrice'.$i), $currency);
             $vat = isset($body['APIBasketProdVAT'.$i]) ? (int) $body['APIBasketProdVAT'.$i] : 0;
 
-            $payment->addPaymentLine(new PaymentLine($productNumber, $name, $qty, $price, $vat));
+            $payment->addPaymentLine(static::createPaymentLine($productNumber, $name, $qty, $price, $vat));
 
             ++$i;
         }
@@ -406,6 +406,11 @@ class Payment
         $str = preg_replace('/[^0-9]+/', '', $str);
 
         return intval($str);
+    }
+
+    public static function createPaymentLine(string $productNumber, string $name, int $quantity, Money $price, int $vat)
+    {
+        return new PaymentLine($productNumber, $name, $quantity, $price, $vat);
     }
 
     /**
