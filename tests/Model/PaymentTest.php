@@ -2,6 +2,8 @@
 
 namespace Loevgaard\Dandomain\Pay\Model;
 
+use Money\Currency;
+use Money\Money;
 use PHPUnit\Framework\TestCase;
 use Zend\Diactoros\ServerRequestFactory;
 
@@ -89,7 +91,7 @@ final class PaymentTest extends TestCase
         $this->assertSame((int)$postRequest['APIOrderID'], $payment->getOrderId());
         $this->assertSame($postRequest['APISessionID'], $payment->getSessionId());
         $this->assertSame($postRequest['APICurrencySymbol'], $payment->getCurrencySymbol());
-        $this->assertSame(349.75, $payment->getTotalAmount());
+        $this->assertEquals(new Money('34975', new Currency('DKK')), $payment->getTotalAmount());
         $this->assertSame($postRequest['APICallBackUrl'], $payment->getCallBackUrl());
         $this->assertSame($postRequest['APIFullCallBackOKUrl'], $payment->getFullCallBackOkUrl());
         $this->assertSame($postRequest['APICallBackOKUrl'], $payment->getCallBackOkUrl());
@@ -133,10 +135,10 @@ final class PaymentTest extends TestCase
         $this->assertSame($postRequest['APIDean'], $payment->getDeliveryEan());
         $this->assertSame($postRequest['APIShippingMethod'], $payment->getShippingMethod());
         $this->assertSame((int)$postRequest['APIShippingMethodID'], $payment->getShippingMethodId());
-        $this->assertSame(200.00, $payment->getShippingFee());
+        $this->assertEquals(new Money('20000', new Currency('DKK')), $payment->getShippingFee());
         $this->assertSame($postRequest['APIPayMethod'], $payment->getPaymentMethod());
         $this->assertSame((int)$postRequest['APIPayMethodID'], $payment->getPaymentMethodId());
-        $this->assertSame(100.00, $payment->getPaymentFee());
+        $this->assertEquals(new Money('10000', new Currency('DKK')), $payment->getPaymentFee());
         $this->assertSame($postRequest['APICIP'], $payment->getCustomerIp());
         $this->assertSame($postRequest['APILoadBalancerRealIP'], $payment->getLoadBalancerRealIp());
         $this->assertSame($serverRequest['HTTP_REFERER'], $payment->getReferrer());
@@ -146,31 +148,22 @@ final class PaymentTest extends TestCase
             $qty = (int)$postRequest['APIBasketProdAmount'.$i];
             $productNumber = $postRequest['APIBasketProdNumber'.$i];
             $name = $postRequest['APIBasketProdName'.$i];
-            $price = Payment::currencyStringToFloat($postRequest['APIBasketProdPrice'.$i]);
+            $price = new Money(Payment::priceStringToInt($postRequest['APIBasketProdPrice'.$i]), new Currency('DKK'));
             $vat = (int) $postRequest['APIBasketProdVAT'.$i];
 
             $this->assertSame($qty, $paymentLine->getQuantity());
             $this->assertSame($productNumber, $paymentLine->getProductNumber());
             $this->assertSame($name, $paymentLine->getName());
-            $this->assertSame($price, $paymentLine->getPrice());
+            $this->assertEquals($price, $paymentLine->getPrice());
             $this->assertSame($vat, $paymentLine->getVat());
 
-            ++$i;
+            $i++;
         }
     }
 
     public function testSetPaymentLines()
     {
-        $paymentLine = new PaymentLine();
-        $paymentLine
-            ->setVat(25)
-            ->setPrice(100.50)
-            ->setName('name')
-            ->setProductNumber('product_number')
-            ->setQuantity(1)
-        ;
-
-        $paymentLines = [$paymentLine];
+        $paymentLines = [new PaymentLine('product_number', 'name', 1, new Money('10050', new Currency('DKK')), 25)];
 
         $paymentRequest = new Payment();
         $paymentRequest->setPaymentLines($paymentLines);
@@ -178,14 +171,14 @@ final class PaymentTest extends TestCase
         $this->assertSame($paymentLines, $paymentRequest->getPaymentLines());
     }
 
-    public function testCurrencyStringToFloat()
+    public function testPriceStringToInt()
     {
-        $this->assertSame(1000.50, Payment::currencyStringToFloat('1,000.50'));
-        $this->assertSame(1000.50, Payment::currencyStringToFloat('1000.50'));
-        $this->assertSame(1000.50, Payment::currencyStringToFloat('1.000,50'));
-        $this->assertSame(1000.50, Payment::currencyStringToFloat('1000,50'));
+        $this->assertSame(100050, Payment::priceStringToInt('1,000.50'));
+        $this->assertSame(100050, Payment::priceStringToInt('1000.50'));
+        $this->assertSame(100050, Payment::priceStringToInt('1.000,50'));
+        $this->assertSame(100050, Payment::priceStringToInt('1000,50'));
 
         $this->expectException('\InvalidArgumentException');
-        Payment::currencyStringToFloat('1000,5');
+        Payment::priceStringToInt('1000,5');
     }
 }

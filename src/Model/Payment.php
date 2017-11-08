@@ -2,6 +2,8 @@
 
 namespace Loevgaard\Dandomain\Pay\Model;
 
+use Money\Currency;
+use Money\Money;
 use Psr\Http\Message\ServerRequestInterface;
 
 class Payment
@@ -32,7 +34,7 @@ class Payment
     protected $currencySymbol;
 
     /**
-     * @var float
+     * @var Money
      */
     protected $totalAmount;
 
@@ -257,7 +259,7 @@ class Payment
     protected $shippingMethodId;
 
     /**
-     * @var float
+     * @var Money
      */
     protected $shippingFee;
 
@@ -272,7 +274,7 @@ class Payment
     protected $paymentMethodId;
 
     /**
-     * @var float
+     * @var Money
      */
     protected $paymentFee;
 
@@ -302,13 +304,14 @@ class Payment
         $body = is_array($body) ? $body : [];
 
         $payment = new static();
+        $currency = new Currency($body['APICurrencySymbol']);
 
         $payment->setApiKey($body['APIkey'] ?? '');
         $payment->setMerchant($body['APIMerchant'] ?? '');
         $payment->setOrderId($body['APIOrderID'] ?? 0);
         $payment->setSessionId($body['APISessionID'] ?? '');
         $payment->setCurrencySymbol($body['APICurrencySymbol'] ?? '');
-        $payment->setTotalAmount(static::currencyStringToFloat($body['APITotalAmount'] ?? '0.00', 'APITotalAmount'));
+        $payment->setTotalAmount(new Money(static::priceStringToInt($body['APITotalAmount'] ?? '0.00', 'APITotalAmount'), $currency));
         $payment->setCallBackUrl($body['APICallBackUrl'] ?? '');
         $payment->setFullCallBackOkUrl($body['APIFullCallBackOKUrl'] ?? '');
         $payment->setCallBackOkUrl($body['APICallBackOKUrl'] ?? '');
@@ -352,38 +355,24 @@ class Payment
         $payment->setDeliveryEan($body['APIDean'] ?? '');
         $payment->setShippingMethod($body['APIShippingMethod'] ?? '');
         $payment->setShippingMethodId(isset($body['APIShippingMethodID']) ? (int)$body['APIShippingMethodID'] : 0);
-        $payment->setShippingFee(static::currencyStringToFloat($body['APIShippingFee'] ?? '0.00', 'APIShippingFee'));
+        $payment->setShippingFee(new Money(static::priceStringToInt($body['APIShippingFee'] ?? '0.00', 'APIShippingFee'), $currency));
         $payment->setPaymentMethod($body['APIPayMethod'] ?? '');
         $payment->setPaymentMethodId(isset($body['APIPayMethodID']) ? (int)$body['APIPayMethodID'] : 0);
-        $payment->setPaymentFee(static::currencyStringToFloat($body['APIPayFee'] ?? '0.00', 'APIPayFee'));
+        $payment->setPaymentFee(new Money(static::priceStringToInt($body['APIPayFee'] ?? '0.00', 'APIPayFee'), $currency));
         $payment->setCustomerIp($body['APICIP'] ?? '');
         $payment->setLoadBalancerRealIp($body['APILoadBalancerRealIP'] ?? '');
         $payment->setReferrer($request->hasHeader('referer') ? $request->getHeaderLine('referer') : '');
 
         // populate order lines
         $i = 1;
-        while (true) {
-            $exists = isset($body['APIBasketProdAmount'.$i]);
-            if (false === $exists) {
-                break;
-            }
-
-            $qty = isset($body['APIBasketProdAmount'.$i]) ? (int) $body['APIBasketProdAmount'.$i] : 0;
-            $productNumber = isset($body['APIBasketProdNumber'.$i]) ? $body['APIBasketProdNumber'.$i] : '';
-            $name = isset($body['APIBasketProdName'.$i]) ? $body['APIBasketProdName'.$i] : '';
-            $price = isset($body['APIBasketProdPrice'.$i]) ?
-                static::currencyStringToFloat($body['APIBasketProdPrice'.$i], 'APIBasketProdPrice'.$i) : 0.00;
+        while (isset($body['APIBasketProdAmount'.$i])) {
+            $qty = (int) $body['APIBasketProdAmount'.$i];
+            $productNumber = $body['APIBasketProdNumber'.$i] ?? '';
+            $name = $body['APIBasketProdName'.$i] ?? '';
+            $price = new Money(static::priceStringToInt($body['APIBasketProdPrice'.$i] ?? '0.00', 'APIBasketProdPrice'.$i), $currency);
             $vat = isset($body['APIBasketProdVAT'.$i]) ? (int) $body['APIBasketProdVAT'.$i] : 0;
 
-            $paymentLine = new PaymentLine();
-            $paymentLine
-                ->setQuantity($qty)
-                ->setProductNumber($productNumber)
-                ->setName($name)
-                ->setPrice($price)
-                ->setVat($vat)
-            ;
-            $payment->addPaymentLine($paymentLine);
+            $payment->addPaymentLine(new PaymentLine($productNumber, $name, $qty, $price, $vat));
 
             ++$i;
         }
@@ -398,14 +387,14 @@ class Payment
      * - 1000.50
      * - 1000,50.
      *
-     * and returns 1000.50
+     * and returns 100050
      *
      * @param string $str
      * @param string $propertyPath
      *
-     * @return float
+     * @return int
      */
-    public static function currencyStringToFloat(string $str, string $propertyPath = ''): float
+    public static function priceStringToInt(string $str, string $propertyPath = '') : int
     {
         $str = trim($str);
 
@@ -416,7 +405,7 @@ class Payment
         }
         $str = preg_replace('/[^0-9]+/', '', $str);
 
-        return intval($str) / 100;
+        return intval($str);
     }
 
     /**
@@ -520,19 +509,19 @@ class Payment
     }
 
     /**
-     * @return float
+     * @return Money
      */
-    public function getTotalAmount(): ?float
+    public function getTotalAmount(): ?Money
     {
         return $this->totalAmount;
     }
 
     /**
-     * @param float $totalAmount
+     * @param Money $totalAmount
      *
      * @return Payment
      */
-    public function setTotalAmount(float $totalAmount): self
+    public function setTotalAmount(Money $totalAmount): self
     {
         $this->totalAmount = $totalAmount;
 
@@ -1418,19 +1407,19 @@ class Payment
     }
 
     /**
-     * @return float
+     * @return Money
      */
-    public function getShippingFee(): ?float
+    public function getShippingFee(): ?Money
     {
         return $this->shippingFee;
     }
 
     /**
-     * @param float $shippingFee
+     * @param Money $shippingFee
      *
      * @return Payment
      */
-    public function setShippingFee(float $shippingFee): self
+    public function setShippingFee(Money $shippingFee): self
     {
         $this->shippingFee = $shippingFee;
 
@@ -1476,19 +1465,19 @@ class Payment
     }
 
     /**
-     * @return float
+     * @return Money
      */
-    public function getPaymentFee(): ?float
+    public function getPaymentFee(): ?Money
     {
         return $this->paymentFee;
     }
 
     /**
-     * @param float $paymentFee
+     * @param Money $paymentFee
      *
      * @return Payment
      */
-    public function setPaymentFee(float $paymentFee): self
+    public function setPaymentFee(Money $paymentFee): self
     {
         $this->paymentFee = $paymentFee;
 

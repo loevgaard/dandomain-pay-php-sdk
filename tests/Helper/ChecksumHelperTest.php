@@ -3,6 +3,8 @@
 namespace Loevgaard\Dandomain\Pay\Helper;
 
 use Loevgaard\Dandomain\Pay\Model\Payment;
+use Money\Currency;
+use Money\Money;
 use PHPUnit\Framework\TestCase;
 
 final class ChecksumHelperTest extends TestCase
@@ -13,7 +15,7 @@ final class ChecksumHelperTest extends TestCase
         $payment
             ->setApiKey('c30c731cc1e22e9d0f7ce4fa9768a4df')
             ->setOrderId(1)
-            ->setTotalAmount(100.50)
+            ->setTotalAmount(new Money('10050', new Currency('DKK')))
             ->setPaymentGatewayCurrencyCode(208)
         ;
         $handler = new ChecksumHelper($payment, 'key1', 'key2');
@@ -24,7 +26,7 @@ final class ChecksumHelperTest extends TestCase
     public function testGenerateChecksum1()
     {
         $orderId = 100;
-        $amount = 250.75;
+        $amount = new Money('25075', new Currency('DKK'));
         $sharedKey = 'key';
         $currency = 208;
 

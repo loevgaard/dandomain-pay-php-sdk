@@ -3,6 +3,7 @@
 namespace Loevgaard\Dandomain\Pay\Helper;
 
 use Loevgaard\Dandomain\Pay\Model\Payment;
+use Money\Money;
 
 /**
  * The checksum helper will assist in creating checksums and also verifying checksums based on a payment
@@ -86,16 +87,18 @@ class ChecksumHelper
 
     /**
      * @param int    $orderId
-     * @param float  $amount
+     * @param Money  $amount
      * @param string $sharedKey
      * @param int    $currency
      *
      * @return string
      */
-    public static function generateChecksum1(int $orderId, float $amount, string $sharedKey, int $currency): string
+    public static function generateChecksum1(int $orderId, Money $amount, string $sharedKey, int $currency): string
     {
+        $amountAsFloat = (float)$amount->getAmount() / pow(10, 2);
+
         // the amount needs to be formatted as a danish number, so we convert the float
-        $amount = number_format($amount, 2, ',', '');
+        $amount = number_format($amountAsFloat, 2, ',', '');
 
         return strtolower(md5($orderId.'+'.$amount.'+'.$sharedKey.'+'.$currency));
     }

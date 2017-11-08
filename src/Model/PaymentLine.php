@@ -3,6 +3,7 @@
 namespace Loevgaard\Dandomain\Pay\Model;
 
 use Brick\Math\BigDecimal;
+use Money\Money;
 
 class PaymentLine
 {
@@ -24,7 +25,7 @@ class PaymentLine
     /**
      * The price excl vat.
      *
-     * @var float
+     * @var Money
      */
     protected $price;
 
@@ -40,29 +41,42 @@ class PaymentLine
      */
     protected $payment;
 
+    /**
+     * @param string $productNumber
+     * @param string $name
+     * @param int $quantity
+     * @param Money $price
+     * @param int $vat
+     */
+    public function __construct(string $productNumber, string $name, int $quantity, Money $price, int $vat)
+    {
+        $this->setProductNumber($productNumber)
+            ->setName($name)
+            ->setQuantity($quantity)
+            ->setPrice($price)
+            ->setVat($vat);
+    }
+
     /******************
      * Helper methods *
      *****************/
 
     /**
-     * @return float
+     * @return Money
      */
-    public function getPriceExclVat(): float
+    public function getPriceExclVat(): Money
     {
         return $this->getPrice();
     }
 
     /**
-     * @return float
+     * @return Money
      */
-    public function getPriceInclVat(): float
+    public function getPriceInclVat(): Money
     {
-        $price = BigDecimal::of($this->getPrice());
-
-        return $price
-            ->multipliedBy(100 + $this->getVat())
-            ->dividedBy(100, 2)
-            ->toFloat()
+        return $this->price
+            ->multiply(100 + $this->getVat())
+            ->divide(100)
         ;
     }
 
@@ -103,7 +117,7 @@ class PaymentLine
      *
      * @return PaymentLine
      */
-    public function setName($name): self
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -123,7 +137,7 @@ class PaymentLine
      *
      * @return PaymentLine
      */
-    public function setQuantity($quantity): self
+    public function setQuantity(int $quantity): self
     {
         $this->quantity = $quantity;
 
@@ -133,19 +147,19 @@ class PaymentLine
     /**
      * Returns the price excl vat.
      *
-     * @return float
+     * @return Money
      */
-    public function getPrice(): float
+    public function getPrice(): Money
     {
         return $this->price;
     }
 
     /**
-     * @param float $price
+     * @param Money $price
      *
      * @return PaymentLine
      */
-    public function setPrice($price): self
+    public function setPrice(Money $price): self
     {
         $this->price = $price;
 
@@ -167,7 +181,7 @@ class PaymentLine
      *
      * @return PaymentLine
      */
-    public function setVat($vat): self
+    public function setVat(int $vat): self
     {
         $this->vat = $vat;
 

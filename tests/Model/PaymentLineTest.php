@@ -2,6 +2,8 @@
 
 namespace Loevgaard\Dandomain\Pay\Model;
 
+use Money\Currency;
+use Money\Money;
 use PHPUnit\Framework\TestCase;
 
 final class PaymentLineTest extends TestCase
@@ -10,22 +12,20 @@ final class PaymentLineTest extends TestCase
     {
         $payment = new Payment();
 
-        $paymentLine = new PaymentLine();
+        $price = new Money('7996', new Currency('DKK'));
+        $priceInclVat = $price->multiply(1.25);
+
+        $paymentLine = new PaymentLine('productnumber', 'name', 1, $price, 25);
         $paymentLine
             ->setPayment($payment)
-            ->setName('name')
-            ->setQuantity(1)
-            ->setPrice(79.96)
-            ->setVat(25)
-            ->setProductNumber('productnumber')
         ;
 
         $this->assertSame($payment, $paymentLine->getPayment());
         $this->assertSame('name', $paymentLine->getName());
         $this->assertSame(1, $paymentLine->getQuantity());
-        $this->assertSame(79.96, $paymentLine->getPrice());
-        $this->assertSame(79.96, $paymentLine->getPriceExclVat());
-        $this->assertSame(99.95, $paymentLine->getPriceInclVat());
+        $this->assertSame($price, $paymentLine->getPrice());
+        $this->assertSame($price, $paymentLine->getPriceExclVat());
+        $this->assertEquals($priceInclVat, $paymentLine->getPriceInclVat());
         $this->assertSame(25, $paymentLine->getVat());
         $this->assertSame('productnumber', $paymentLine->getProductNumber());
     }
