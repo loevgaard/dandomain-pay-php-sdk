@@ -1584,7 +1584,7 @@ class Payment
      * @param int $amount
      * @return Money|null
      */
-    private function createMoney(int $amount = 0) : ?Money
+    protected function createMoney(int $amount = 0) : ?Money
     {
         if (!$this->currencySymbol) {
             return null;
@@ -1601,7 +1601,7 @@ class Payment
      * @param string $amount
      * @return Money|null
      */
-    private function createMoneyFromFloat(string $amount = '0.00') : ?Money
+    protected function createMoneyFromFloat(string $amount = '0.00') : ?Money
     {
         $amount = static::priceStringToInt((string)$amount);
         return $this->createMoney($amount);
