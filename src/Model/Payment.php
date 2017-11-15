@@ -1579,6 +1579,16 @@ class Payment
     }
 
     /**
+     * Returns the default currency for this payment
+     *
+     * @return null|string
+     */
+    protected function getCurrency() : ?string
+    {
+        return $this->currencySymbol;
+    }
+
+    /**
      * A helper method for creating a Money object from a float based on the shared currency
      *
      * @param int $amount
@@ -1586,11 +1596,11 @@ class Payment
      */
     protected function createMoney(int $amount = 0) : ?Money
     {
-        if (!$this->currencySymbol) {
+        if (!$this->getCurrency()) {
             return null;
         }
 
-        return new Money($amount, new Currency($this->currencySymbol));
+        return new Money($amount, new Currency($this->getCurrency()));
     }
 
     /**
