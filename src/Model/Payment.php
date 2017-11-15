@@ -297,87 +297,108 @@ class Payment
     {
         $this->paymentLines = [];
     }
-
+    
     public static function createFromRequest(ServerRequestInterface $request) : Payment
+    {
+        $payment = new static();
+        $payment->populateFromRequest($request);
+        return $payment;
+    }
+
+    public function populateFromRequest(ServerRequestInterface $request)
     {
         $body = $request->getParsedBody();
         $body = is_array($body) ? $body : [];
 
-        $payment = new static();
-        $currency = new Currency($body['APICurrencySymbol']);
+        // set currency because we use it to create Money objects
+        $this->setCurrencySymbol($body['APICurrencySymbol'] ?? '');
+        
+        $totalAmount = $this->createMoneyFromFloat($body['APITotalAmount'] ?? '0.00');
+        if ($totalAmount) {
+            $this->setTotalAmount($totalAmount);
+        }
 
-        $payment->setApiKey($body['APIkey'] ?? '');
-        $payment->setMerchant($body['APIMerchant'] ?? '');
-        $payment->setOrderId($body['APIOrderID'] ?? 0);
-        $payment->setSessionId($body['APISessionID'] ?? '');
-        $payment->setCurrencySymbol($body['APICurrencySymbol'] ?? '');
-        $payment->setTotalAmount(new Money(static::priceStringToInt($body['APITotalAmount'] ?? '0.00', 'APITotalAmount'), $currency));
-        $payment->setCallBackUrl($body['APICallBackUrl'] ?? '');
-        $payment->setFullCallBackOkUrl($body['APIFullCallBackOKUrl'] ?? '');
-        $payment->setCallBackOkUrl($body['APICallBackOKUrl'] ?? '');
-        $payment->setCallBackServerUrl($body['APICallBackServerUrl'] ?? '');
-        $payment->setLanguageId(isset($body['APILanguageID']) ? (int) $body['APILanguageID'] : 0);
-        $payment->setTestMode(isset($body['APITestMode']) && 'True' === $body['APITestMode']);
-        $payment->setPaymentGatewayCurrencyCode(isset($body['APIPayGatewayCurrCode']) ? (int) $body['APIPayGatewayCurrCode'] : 0);
-        $payment->setCardTypeId(isset($body['APICardTypeID']) ? (int) $body['APICardTypeID'] : 0);
-        $payment->setCustomerRekvNr($body['APICRekvNr'] ?? '');
-        $payment->setCustomerName($body['APICName'] ?? '');
-        $payment->setCustomerCompany($body['APICCompany'] ?? '');
-        $payment->setCustomerAddress($body['APICAddress'] ?? '');
-        $payment->setCustomerAddress2($body['APICAddress2'] ?? '');
-        $payment->setCustomerZipCode($body['APICZipCode'] ?? '');
-        $payment->setCustomerCity($body['APICCity'] ?? '');
-        $payment->setCustomerCountryId(isset($body['APICCountryID']) ? (int) $body['APICCountryID'] : 0);
-        $payment->setCustomerCountry($body['APICCountry'] ?? '');
-        $payment->setCustomerPhone($body['APICPhone'] ?? '');
-        $payment->setCustomerFax($body['APICFax'] ?? '');
-        $payment->setCustomerEmail($body['APICEmail'] ?? '');
-        $payment->setCustomerNote($body['APICNote'] ?? '');
-        $payment->setCustomerCvrnr($body['APICcvrnr'] ?? '');
-        $payment->setCustomerCustTypeId(isset($body['APICCustTypeID']) ? (int) $body['APICCustTypeID'] : 0);
-        $payment->setCustomerEan($body['APICEAN'] ?? '');
-        $payment->setCustomerRes1($body['APICres1'] ?? '');
-        $payment->setCustomerRes2($body['APICres2'] ?? '');
-        $payment->setCustomerRes3($body['APICres3'] ?? '');
-        $payment->setCustomerRes4($body['APICres4'] ?? '');
-        $payment->setCustomerRes5($body['APICres5'] ?? '');
-        $payment->setDeliveryName($body['APIDName'] ?? '');
-        $payment->setDeliveryCompany($body['APIDCompany'] ?? '');
-        $payment->setDeliveryAddress($body['APIDAddress'] ?? '');
-        $payment->setDeliveryAddress2($body['APIDAddress2'] ?? '');
-        $payment->setDeliveryZipCode($body['APIDZipCode'] ?? '');
-        $payment->setDeliveryCity($body['APIDCity'] ?? '');
-        $payment->setDeliveryCountryID(isset($body['APIDCountryID']) ? (int) $body['APIDCountryID'] : 0);
-        $payment->setDeliveryCountry($body['APIDCountry'] ?? '');
-        $payment->setDeliveryPhone($body['APIDPhone'] ?? '');
-        $payment->setDeliveryFax($body['APIDFax'] ?? '');
-        $payment->setDeliveryEmail($body['APIDEmail'] ?? '');
-        $payment->setDeliveryEan($body['APIDean'] ?? '');
-        $payment->setShippingMethod($body['APIShippingMethod'] ?? '');
-        $payment->setShippingMethodId(isset($body['APIShippingMethodID']) ? (int)$body['APIShippingMethodID'] : 0);
-        $payment->setShippingFee(new Money(static::priceStringToInt($body['APIShippingFee'] ?? '0.00', 'APIShippingFee'), $currency));
-        $payment->setPaymentMethod($body['APIPayMethod'] ?? '');
-        $payment->setPaymentMethodId(isset($body['APIPayMethodID']) ? (int)$body['APIPayMethodID'] : 0);
-        $payment->setPaymentFee(new Money(static::priceStringToInt($body['APIPayFee'] ?? '0.00', 'APIPayFee'), $currency));
-        $payment->setCustomerIp($body['APICIP'] ?? '');
-        $payment->setLoadBalancerRealIp($body['APILoadBalancerRealIP'] ?? '');
-        $payment->setReferrer($request->hasHeader('referer') ? $request->getHeaderLine('referer') : '');
+        $shippingFee = $this->createMoneyFromFloat($body['APIShippingFee'] ?? '0.00');
+        if ($shippingFee) {
+            $this->setShippingFee($shippingFee);
+        }
+
+        $paymentFee = $this->createMoneyFromFloat($body['APIPayFee'] ?? '0.00');
+        if ($paymentFee) {
+            $this->setPaymentFee($paymentFee);
+        }
+
+        $this->setApiKey($body['APIkey'] ?? '');
+        $this->setMerchant($body['APIMerchant'] ?? '');
+        $this->setOrderId($body['APIOrderID'] ?? 0);
+        $this->setSessionId($body['APISessionID'] ?? '');
+        $this->setCallBackUrl($body['APICallBackUrl'] ?? '');
+        $this->setFullCallBackOkUrl($body['APIFullCallBackOKUrl'] ?? '');
+        $this->setCallBackOkUrl($body['APICallBackOKUrl'] ?? '');
+        $this->setCallBackServerUrl($body['APICallBackServerUrl'] ?? '');
+        $this->setLanguageId((int)($body['APILanguageID'] ?? 0));
+        $this->setTestMode(isset($body['APITestMode']) && 'True' === $body['APITestMode']);
+        $this->setPaymentGatewayCurrencyCode((int)($body['APIPayGatewayCurrCode'] ??  0));
+        $this->setCardTypeId((int)($body['APICardTypeID'] ?? 0));
+        $this->setCustomerRekvNr($body['APICRekvNr'] ?? '');
+        $this->setCustomerName($body['APICName'] ?? '');
+        $this->setCustomerCompany($body['APICCompany'] ?? '');
+        $this->setCustomerAddress($body['APICAddress'] ?? '');
+        $this->setCustomerAddress2($body['APICAddress2'] ?? '');
+        $this->setCustomerZipCode($body['APICZipCode'] ?? '');
+        $this->setCustomerCity($body['APICCity'] ?? '');
+        $this->setCustomerCountryId((int)($body['APICCountryID'] ?? 0));
+        $this->setCustomerCountry($body['APICCountry'] ?? '');
+        $this->setCustomerPhone($body['APICPhone'] ?? '');
+        $this->setCustomerFax($body['APICFax'] ?? '');
+        $this->setCustomerEmail($body['APICEmail'] ?? '');
+        $this->setCustomerNote($body['APICNote'] ?? '');
+        $this->setCustomerCvrnr($body['APICcvrnr'] ?? '');
+        $this->setCustomerCustTypeId((int)($body['APICCustTypeID'] ?? 0));
+        $this->setCustomerEan($body['APICEAN'] ?? '');
+        $this->setCustomerRes1($body['APICres1'] ?? '');
+        $this->setCustomerRes2($body['APICres2'] ?? '');
+        $this->setCustomerRes3($body['APICres3'] ?? '');
+        $this->setCustomerRes4($body['APICres4'] ?? '');
+        $this->setCustomerRes5($body['APICres5'] ?? '');
+        $this->setDeliveryName($body['APIDName'] ?? '');
+        $this->setDeliveryCompany($body['APIDCompany'] ?? '');
+        $this->setDeliveryAddress($body['APIDAddress'] ?? '');
+        $this->setDeliveryAddress2($body['APIDAddress2'] ?? '');
+        $this->setDeliveryZipCode($body['APIDZipCode'] ?? '');
+        $this->setDeliveryCity($body['APIDCity'] ?? '');
+        $this->setDeliveryCountryID((int)($body['APIDCountryID'] ?? 0));
+        $this->setDeliveryCountry($body['APIDCountry'] ?? '');
+        $this->setDeliveryPhone($body['APIDPhone'] ?? '');
+        $this->setDeliveryFax($body['APIDFax'] ?? '');
+        $this->setDeliveryEmail($body['APIDEmail'] ?? '');
+        $this->setDeliveryEan($body['APIDean'] ?? '');
+        $this->setShippingMethod($body['APIShippingMethod'] ?? '');
+        $this->setShippingMethodId((int)($body['APIShippingMethodID'] ?? 0));
+        $this->setPaymentMethod($body['APIPayMethod'] ?? '');
+        $this->setPaymentMethodId((int)($body['APIPayMethodID'] ?? 0));
+        $this->setCustomerIp($body['APICIP'] ?? '');
+        $this->setLoadBalancerRealIp($body['APILoadBalancerRealIP'] ?? '');
+        $this->setReferrer($request->hasHeader('referer') ? $request->getHeaderLine('referer') : '');
 
         // populate order lines
         $i = 1;
         while (isset($body['APIBasketProdAmount'.$i])) {
-            $qty = (int) $body['APIBasketProdAmount'.$i];
+            $qty = (int)$body['APIBasketProdAmount'.$i];
             $productNumber = $body['APIBasketProdNumber'.$i] ?? '';
             $name = $body['APIBasketProdName'.$i] ?? '';
-            $price = new Money(static::priceStringToInt($body['APIBasketProdPrice'.$i] ?? '0.00', 'APIBasketProdPrice'.$i), $currency);
-            $vat = isset($body['APIBasketProdVAT'.$i]) ? (int) $body['APIBasketProdVAT'.$i] : 0;
+            $price = $this->createMoneyFromFloat($body['APIBasketProdPrice'.$i] ?? '0.00');
+            $vat = (int)($body['APIBasketProdVAT'.$i] ?? 0);
 
-            $payment->addPaymentLine(static::createPaymentLine($productNumber, $name, $qty, $price, $vat));
+            $this->addPaymentLine(static::createPaymentLine($productNumber, $name, $qty, $price, $vat));
 
             ++$i;
         }
+    }
 
-        return $payment;
+    public static function createPaymentLine(string $productNumber, string $name, int $quantity, Money $price, int $vat)
+    {
+        return new PaymentLine($productNumber, $name, $quantity, $price, $vat);
     }
 
     /**
@@ -406,11 +427,6 @@ class Payment
         $str = preg_replace('/[^0-9]+/', '', $str);
 
         return intval($str);
-    }
-
-    public static function createPaymentLine(string $productNumber, string $name, int $quantity, Money $price, int $vat)
-    {
-        return new PaymentLine($productNumber, $name, $quantity, $price, $vat);
     }
 
     /**
@@ -1560,5 +1576,34 @@ class Payment
         $this->paymentLines[] = $paymentLine;
 
         return $this;
+    }
+
+    /**
+     * A helper method for creating a Money object from a float based on the shared currency
+     *
+     * @param int $amount
+     * @return Money|null
+     */
+    private function createMoney(int $amount = 0) : ?Money
+    {
+        if (!$this->currencySymbol) {
+            return null;
+        }
+
+        return new Money($amount, new Currency($this->currencySymbol));
+    }
+
+    /**
+     * A helper method for creating a Money object from a float based on the shared currency
+     *
+     * The float can be any format, i.e. 1.50 or 1,50
+     *
+     * @param string $amount
+     * @return Money|null
+     */
+    private function createMoneyFromFloat(string $amount = '0.00') : ?Money
+    {
+        $amount = static::priceStringToInt((string)$amount);
+        return $this->createMoney($amount);
     }
 }

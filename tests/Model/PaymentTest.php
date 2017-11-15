@@ -161,6 +161,16 @@ final class PaymentTest extends TestCase
         }
     }
 
+    public function testCreateMoneyWithNullCurrency()
+    {
+        $request = ServerRequestFactory::fromGlobals(null, null, [
+            'APITotalAmount' => '349,75',
+        ]);
+
+        $payment = Payment::createFromRequest($request);
+        $this->assertSame(null, $payment->getTotalAmount());
+    }
+
     public function testSetPaymentLines()
     {
         $paymentLines = [new PaymentLine('product_number', 'name', 1, new Money('10050', new Currency('DKK')), 25)];
