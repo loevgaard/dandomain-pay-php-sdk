@@ -74,10 +74,17 @@ class PaymentLine
      */
     public function getPriceInclVat(): Money
     {
-        return $this->price
-            ->multiply(100 + $this->getVat())
-            ->divide(100)
-        ;
+        return $this->getPriceExclVat()->add($this->getVatAmount());
+    }
+
+    /**
+     * @return Money
+     */
+    public function getVatAmount(): Money
+    {
+        $multiplier = $this->getVat() / 100;
+
+        return $this->getPriceExclVat()->multiply($multiplier);
     }
 
     /*********************
