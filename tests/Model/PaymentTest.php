@@ -39,6 +39,7 @@ final class PaymentTest extends TestCase
             'APICCity' => 'Aalborg',
             'APICCountryID' => '4911',
             'APICCountry' => 'Danmark',
+            'APICCountryCode' => 'DK',
             'APICPhone' => '11202020',
             'APICFax' => '22222222',
             'APICEmail' => 'brian@mikkelsen.dk',
@@ -109,6 +110,7 @@ final class PaymentTest extends TestCase
         $this->assertSame($postRequest['APICCity'], $payment->getCustomerCity());
         $this->assertSame((int)$postRequest['APICCountryID'], $payment->getCustomerCountryId());
         $this->assertSame($postRequest['APICCountry'], $payment->getCustomerCountry());
+        $this->assertSame($postRequest['APICCountryCode'], $payment->getCustomerCountryCode());
         $this->assertSame($postRequest['APICPhone'], $payment->getCustomerPhone());
         $this->assertSame($postRequest['APICFax'], $payment->getCustomerFax());
         $this->assertSame($postRequest['APICEmail'], $payment->getCustomerEmail());

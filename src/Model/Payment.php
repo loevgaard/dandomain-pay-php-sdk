@@ -124,6 +124,13 @@ class Payment
     protected $customerCountry;
 
     /**
+     * This is the ISO 639-2 country code
+     *
+     * @var string
+     */
+    protected $customerCountryCode;
+
+    /**
      * @var string
      */
     protected $customerPhone;
@@ -349,6 +356,7 @@ class Payment
         $this->setCustomerCity($body['APICCity'] ?? '');
         $this->setCustomerCountryId((int)($body['APICCountryID'] ?? 0));
         $this->setCustomerCountry($body['APICCountry'] ?? '');
+        $this->setCustomerCountryCode($body['APICCountryCode'] ?? '');
         $this->setCustomerPhone($body['APICPhone'] ?? '');
         $this->setCustomerFax($body['APICFax'] ?? '');
         $this->setCustomerEmail($body['APICEmail'] ?? '');
@@ -886,6 +894,24 @@ class Payment
     {
         $this->customerCountry = $customerCountry;
 
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCustomerCountryCode(): ?string
+    {
+        return $this->customerCountryCode;
+    }
+
+    /**
+     * @param string $customerCountryCode
+     * @return Payment
+     */
+    public function setCustomerCountryCode(string $customerCountryCode): self
+    {
+        $this->customerCountryCode = $customerCountryCode;
         return $this;
     }
 
