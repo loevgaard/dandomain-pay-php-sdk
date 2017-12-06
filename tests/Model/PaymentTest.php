@@ -60,6 +60,7 @@ final class PaymentTest extends TestCase
             'APIDCity' => 'Aarhus C',
             'APIDCountryID' => '3810',
             'APIDCountry' => 'England',
+            'APIDCountryCode' => 'GB',
             'APIDPhone' => '+445697454778',
             'APIDFax' => '',
             'APIDEmail' => 'julie@mikkelsen.dk',
@@ -131,6 +132,7 @@ final class PaymentTest extends TestCase
         $this->assertSame($postRequest['APIDCity'], $payment->getDeliveryCity());
         $this->assertSame((int) $postRequest['APIDCountryID'], $payment->getDeliveryCountryID());
         $this->assertSame($postRequest['APIDCountry'], $payment->getDeliveryCountry());
+        $this->assertSame($postRequest['APIDCountryCode'], $payment->getDeliveryCountryCode());
         $this->assertSame($postRequest['APIDPhone'], $payment->getDeliveryPhone());
         $this->assertSame($postRequest['APIDFax'], $payment->getDeliveryFax());
         $this->assertSame($postRequest['APIDEmail'], $payment->getDeliveryEmail());

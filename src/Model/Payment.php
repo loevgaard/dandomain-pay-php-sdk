@@ -124,7 +124,7 @@ class Payment
     protected $customerCountry;
 
     /**
-     * This is the ISO 639-2 country code
+     * This is the ISO 3166 country code
      *
      * @var string
      */
@@ -234,6 +234,13 @@ class Payment
      * @var string
      */
     protected $deliveryCountry;
+
+    /**
+     * This is the ISO 3166 country code
+     *
+     * @var string
+     */
+    protected $deliveryCountryCode;
 
     /**
      * @var string
@@ -377,6 +384,7 @@ class Payment
         $this->setDeliveryCity($body['APIDCity'] ?? '');
         $this->setDeliveryCountryID((int)($body['APIDCountryID'] ?? 0));
         $this->setDeliveryCountry($body['APIDCountry'] ?? '');
+        $this->setDeliveryCountryCode($body['APIDCountryCode'] ?? '');
         $this->setDeliveryPhone($body['APIDPhone'] ?? '');
         $this->setDeliveryFax($body['APIDFax'] ?? '');
         $this->setDeliveryEmail($body['APIDEmail'] ?? '');
@@ -1332,6 +1340,24 @@ class Payment
     {
         $this->deliveryCountry = $deliveryCountry;
 
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDeliveryCountryCode(): ?string
+    {
+        return $this->deliveryCountryCode;
+    }
+
+    /**
+     * @param string $deliveryCountryCode
+     * @return Payment
+     */
+    public function setDeliveryCountryCode(string $deliveryCountryCode)
+    {
+        $this->deliveryCountryCode = $deliveryCountryCode;
         return $this;
     }
 
