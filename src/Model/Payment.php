@@ -540,6 +540,15 @@ class Payment
      */
     public function setCurrencySymbol(string $currencySymbol): self
     {
+        $conversions = [
+            '€' => 'EUR',
+            '$' => 'USD',
+            '£' => 'GBP',
+            '¥' => 'JPY'
+        ];
+
+        $currencySymbol = $conversions[$currencySymbol] ?? $currencySymbol;
+
         $this->currencySymbol = $currencySymbol;
 
         return $this;

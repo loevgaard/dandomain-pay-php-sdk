@@ -195,4 +195,12 @@ final class PaymentTest extends TestCase
         $this->expectException('\InvalidArgumentException');
         Payment::priceStringToInt('1000,5');
     }
+
+    public function testCurrencySymbols()
+    {
+        $payment = new Payment();
+        $payment->setCurrencySymbol('$');
+
+        $this->assertSame('USD', $payment->getCurrencySymbol());
+    }
 }
